@@ -541,7 +541,7 @@ export default function AdminPanel() {
   if (isAdmin === null) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-denim"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-forest"></div>
       </div>
     );
   }
@@ -567,40 +567,40 @@ export default function AdminPanel() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-[2.5rem] p-8 w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col space-y-6"
+              className="bg-forest rounded-[2.5rem] p-8 w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col space-y-6 border border-white/10"
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-2xl font-black text-denim">Review Generated Quiz</h3>
+                  <h3 className="text-2xl font-black text-butter">Review Generated Quiz</h3>
                   <div className="flex items-center gap-2">
                     <p className={cn(
                       "text-sm font-bold",
-                      reviewQuestions.length < 100 ? "text-orange-500" : "text-green-500"
+                      reviewQuestions.length < 100 ? "text-orange-400" : "text-green-400"
                     )}>
                       {reviewQuestions.length} Questions Generated
                     </p>
                     {reviewQuestions.length < 100 && (
-                      <span className="text-[10px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-black animate-pulse">
+                      <span className="text-[10px] bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full font-black animate-pulse">
                         BELOW TARGET (100)
                       </span>
                     )}
                   </div>
                 </div>
-                <button onClick={() => setReviewQuestions(null)} className="text-gray-400 hover:text-black">
+                <button onClick={() => setReviewQuestions(null)} className="text-butter/40 hover:text-butter">
                   <X size={24} />
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
                 {reviewQuestions.map((q, idx) => (
-                  <div key={idx} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-2">
+                  <div key={idx} className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2">
                     <div className="flex justify-between items-start gap-4">
-                      <p className="font-bold text-sm text-gray-800"><span className="text-denim mr-2">Q{idx + 1}.</span>{q.question}</p>
+                      <p className="font-bold text-sm text-butter"><span className="text-butter/40 mr-2">Q{idx + 1}.</span>{q.question}</p>
                       <span className={cn(
                         "text-[8px] font-black uppercase px-2 py-1 rounded-full",
-                        q.difficulty === 'Easy' ? "bg-green-100 text-green-600" :
-                        q.difficulty === 'Medium' ? "bg-yellow-100 text-yellow-600" :
-                        "bg-red-100 text-red-600"
+                        q.difficulty === 'Easy' ? "bg-green-500/20 text-green-400" :
+                        q.difficulty === 'Medium' ? "bg-yellow-500/20 text-yellow-400" :
+                        "bg-red-500/20 text-red-400"
                       )}>
                         {q.difficulty}
                       </span>
@@ -609,7 +609,7 @@ export default function AdminPanel() {
                       {q.options.map((opt: string, oIdx: number) => (
                         <div key={oIdx} className={cn(
                           "text-[10px] p-2 rounded-lg border",
-                          oIdx === q.correctIndex ? "bg-green-50 border-green-200 text-green-700 font-bold" : "bg-white border-gray-100 text-gray-500"
+                          oIdx === q.correctIndex ? "bg-green-500/20 border-green-500/40 text-green-400 font-bold" : "bg-white/5 border-white/10 text-butter/60"
                         )}>
                           {opt}
                         </div>
@@ -619,12 +619,12 @@ export default function AdminPanel() {
                 ))}
               </div>
 
-              <div className="flex gap-4 pt-4 border-t border-gray-100">
-                <button onClick={() => setReviewQuestions(null)} className="btn-secondary flex-1 py-4" disabled={loading}>Discard</button>
+              <div className="flex gap-4 pt-4 border-t border-white/10">
+                <button onClick={() => setReviewQuestions(null)} className="btn-secondary flex-1 py-4 bg-white/5 text-butter border-white/10 hover:bg-white/10" disabled={loading}>Discard</button>
                 <button 
                   onClick={confirmImportQuiz} 
                   disabled={loading}
-                  className="btn-primary flex-1 py-4"
+                  className="btn-primary flex-1 py-4 bg-butter text-forest hover:bg-butter/90"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -647,31 +647,31 @@ export default function AdminPanel() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-[2.5rem] p-8 w-full max-w-md space-y-6"
+              className="bg-forest rounded-[2.5rem] p-8 w-full max-w-md space-y-6 border border-white/10"
             >
               <div className="flex justify-between items-center">
-                <h3 className="text-2xl font-black text-denim">Review Students</h3>
-                <button onClick={() => setReviewStudents(null)} className="text-gray-400 hover:text-black">
+                <h3 className="text-2xl font-black text-butter">Review Students</h3>
+                <button onClick={() => setReviewStudents(null)} className="text-butter/40 hover:text-butter">
                   <X size={24} />
                 </button>
               </div>
 
               <div className="max-h-[50vh] overflow-y-auto space-y-3 pr-2 custom-scrollbar">
                 {reviewStudents.map((s, idx) => (
-                  <div key={idx} className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                    <p className="font-black text-gray-800">{s.name}</p>
+                  <div key={idx} className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <p className="font-black text-butter">{s.name}</p>
                     <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">ID: <span className="text-denim">{s.studentId}</span></p>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Roll: <span className="text-denim">{s.roll}</span></p>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Grade: <span className="text-denim">{s.grade}</span></p>
+                      <p className="text-[10px] font-bold text-butter/40 uppercase tracking-widest">ID: <span className="text-butter">{s.studentId}</span></p>
+                      <p className="text-[10px] font-bold text-butter/40 uppercase tracking-widest">Roll: <span className="text-butter">{s.roll}</span></p>
+                      <p className="text-[10px] font-bold text-butter/40 uppercase tracking-widest">Grade: <span className="text-butter">{s.grade}</span></p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="flex gap-4 pt-4 border-t border-gray-100">
-                <button onClick={() => setReviewStudents(null)} className="btn-secondary flex-1">Discard</button>
-                <button onClick={confirmImportStudents} className="btn-primary flex-1 flex items-center justify-center gap-2">
+              <div className="flex gap-4 pt-4 border-t border-white/10">
+                <button onClick={() => setReviewStudents(null)} className="btn-secondary flex-1 bg-white/5 text-butter border-white/10 hover:bg-white/10">Discard</button>
+                <button onClick={confirmImportStudents} className="btn-primary flex-1 flex items-center justify-center gap-2 bg-butter text-forest hover:bg-butter/90">
                   <CheckCircle size={20} />
                   Authorize All
                 </button>
@@ -750,11 +750,11 @@ export default function AdminPanel() {
       </AnimatePresence>
 
       {/* Tabs */}
-      <div className="flex gap-2 bg-white/40 backdrop-blur-xl p-1.5 rounded-[2.5rem] border border-white/60 shadow-lg">
+      <div className="flex gap-2 bg-butter backdrop-blur-xl p-1.5 rounded-[2.5rem] border border-forest/10 shadow-lg">
         <button
           onClick={() => setActiveTab('users')}
           className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
-            activeTab === 'users' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
+            activeTab === 'users' ? "bg-forest text-butter shadow-xl shadow-forest/10 border border-forest/20" : "text-forest/40 hover:text-forest/60")}
         >
           <Users size={16} />
           Students
@@ -762,7 +762,7 @@ export default function AdminPanel() {
         <button
           onClick={() => setActiveTab('questions')}
           className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
-            activeTab === 'questions' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
+            activeTab === 'questions' ? "bg-forest text-butter shadow-xl shadow-forest/10 border border-forest/20" : "text-forest/40 hover:text-forest/60")}
         >
           <BookOpen size={16} />
           Books
@@ -770,7 +770,7 @@ export default function AdminPanel() {
         <button
           onClick={() => setActiveTab('books')}
           className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
-            activeTab === 'books' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
+            activeTab === 'books' ? "bg-forest text-butter shadow-xl shadow-forest/10 border border-forest/20" : "text-forest/40 hover:text-forest/60")}
         >
           <Sparkles size={16} />
           AI Gen
@@ -778,7 +778,7 @@ export default function AdminPanel() {
         <button
           onClick={() => setActiveTab('database')}
           className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
-            activeTab === 'database' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
+            activeTab === 'database' ? "bg-forest text-butter shadow-xl shadow-forest/10 border border-forest/20" : "text-forest/40 hover:text-forest/60")}
         >
           <Plus size={16} />
           DB
@@ -786,7 +786,7 @@ export default function AdminPanel() {
         <button
           onClick={() => setActiveTab('calendar')}
           className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
-            activeTab === 'calendar' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
+            activeTab === 'calendar' ? "bg-forest text-butter shadow-xl shadow-forest/10 border border-forest/20" : "text-forest/40 hover:text-forest/60")}
         >
           <CalendarIcon size={16} />
           Cal
@@ -796,7 +796,7 @@ export default function AdminPanel() {
       <AnimatePresence mode="wait">
         {activeTab === 'users' && (
           <motion.div key="users" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-            <h3 className="text-xl font-bold text-denim">Manage Students</h3>
+            <h3 className="text-xl font-bold text-forest">Manage Students</h3>
             {loading ? <div className="text-center py-8">Loading...</div> : (
               users.map(user => (
                 <div key={user.id} className="card flex items-center justify-between p-4">
@@ -804,7 +804,7 @@ export default function AdminPanel() {
                     <div className="flex items-center gap-2">
                       <p className="font-bold">{user.name}</p>
                       {user.role === 'admin' && (
-                        <span className="px-2 py-0.5 bg-denim/10 text-denim text-[10px] font-bold rounded-full uppercase tracking-wider">Admin</span>
+                        <span className="px-2 py-0.5 bg-forest/10 text-forest text-[10px] font-bold rounded-full uppercase tracking-wider">Admin</span>
                       )}
                     </div>
                     <p className="text-xs text-gray-500">@{user.username} • {user.xp} <b>BRAIN GAINS</b></p>
@@ -814,7 +814,7 @@ export default function AdminPanel() {
                       onClick={() => handleToggleAdmin(user.id, user.role || 'student')}
                       className={cn(
                         "p-2 rounded-xl transition-all border border-transparent",
-                        user.role === 'admin' ? "bg-denim text-white shadow-lg" : "bg-denim/5 text-denim hover:bg-white hover:border-denim/20 hover:shadow-xl"
+                        user.role === 'admin' ? "bg-forest text-white shadow-lg" : "bg-forest/5 text-forest hover:bg-white hover:border-forest/20 hover:shadow-xl"
                       )}
                       title={user.role === 'admin' ? "Demote to Student" : "Promote to Admin"}
                     >
@@ -822,7 +822,7 @@ export default function AdminPanel() {
                     </button>
                     <button
                       onClick={() => handleAddAchievement(user.id)}
-                      className="p-2 bg-denim/5 text-denim rounded-xl hover:bg-white hover:border-denim/20 hover:shadow-xl transition-all border border-transparent"
+                      className="p-2 bg-forest/5 text-forest rounded-xl hover:bg-white hover:border-forest/20 hover:shadow-xl transition-all border border-transparent"
                       title="Add Achievement"
                     >
                       <Star size={18} />
@@ -855,7 +855,7 @@ export default function AdminPanel() {
           <motion.div key="questions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-2xl font-black text-denim tracking-tight">Quiz Studio</h3>
+                <h3 className="text-2xl font-black text-forest tracking-tight">Quiz Studio</h3>
                 <p className="text-xs text-gray-500 font-medium">Manage your question bank and categories</p>
               </div>
               {questions.length > 0 && (
@@ -872,13 +872,13 @@ export default function AdminPanel() {
             {/* Categories Quick Access */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="card p-6 space-y-4 bg-gradient-to-br from-white to-gray-50/50">
-                <div className="flex items-center gap-2 text-denim">
+                <div className="flex items-center gap-2 text-forest">
                   <FolderInput size={20} />
                   <h4 className="font-bold">Active Subjects</h4>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {Array.from(new Set(questions.map(q => q.subject || 'Uncategorized'))).sort().map(subject => (
-                    <div key={subject} className="group flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-gray-100 shadow-sm hover:border-denim transition-all">
+                    <div key={subject} className="group flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-gray-100 shadow-sm hover:border-forest transition-all">
                       <span className="font-bold text-xs text-gray-600">{subject}</span>
                       <button
                         onClick={() => setConfirmDelete({ id: subject, type: 'category', subType: 'subject' })}
@@ -893,13 +893,13 @@ export default function AdminPanel() {
               </div>
 
               <div className="card p-6 space-y-4 bg-gradient-to-br from-white to-gray-50/50">
-                <div className="flex items-center gap-2 text-denim">
+                <div className="flex items-center gap-2 text-forest">
                   <BookOpen size={20} />
                   <h4 className="font-bold">Active Chapters</h4>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {Array.from(new Set(questions.map(q => q.chapter).filter(Boolean))).map(chapter => (
-                    <div key={chapter} className="group flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-gray-100 shadow-sm hover:border-denim transition-all">
+                    <div key={chapter} className="group flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-gray-100 shadow-sm hover:border-forest transition-all">
                       <span className="font-bold text-xs text-gray-600">{chapter}</span>
                       <button
                         onClick={() => setConfirmDelete({ id: chapter, type: 'category', subType: 'chapter' })}
@@ -915,9 +915,9 @@ export default function AdminPanel() {
             </div>
 
             {/* Add Question Form */}
-            <div className="card overflow-hidden border-2 border-denim/5">
-              <div className="bg-denim/5 px-6 py-4 border-b border-denim/10 flex items-center justify-between">
-                <h3 className="font-bold text-denim flex items-center gap-2">
+            <div className="card overflow-hidden border-2 border-forest/5">
+              <div className="bg-forest/5 px-6 py-4 border-b border-forest/10 flex items-center justify-between">
+                <h3 className="font-bold text-forest flex items-center gap-2">
                   <Plus size={18} />
                   Create New Question
                 </h3>
@@ -968,7 +968,7 @@ export default function AdminPanel() {
             {/* Question List */}
             <div className="space-y-6">
               <div className="flex items-center justify-between px-2">
-                <h3 className="font-black text-denim uppercase tracking-tight">Question Bank</h3>
+                <h3 className="font-black text-forest uppercase tracking-tight">Question Bank</h3>
                 <div className="h-px flex-1 bg-gray-100 mx-4"></div>
               </div>
 
@@ -986,10 +986,10 @@ export default function AdminPanel() {
                   <div key={subject} className="space-y-4">
                     <div className="flex items-center justify-between bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-denim/10 rounded-xl flex items-center justify-center text-denim">
+                        <div className="w-10 h-10 bg-forest/10 rounded-xl flex items-center justify-center text-forest">
                           <FolderInput size={20} />
                         </div>
-                        <h4 className="text-lg font-black text-denim uppercase tracking-tight">Book: {subject}</h4>
+                        <h4 className="text-lg font-black text-forest uppercase tracking-tight">Book: {subject}</h4>
                       </div>
                       <button
                         onClick={() => setConfirmDelete({ id: subject, type: 'category', subType: 'subject' })}
@@ -1002,7 +1002,7 @@ export default function AdminPanel() {
                     
                     {Object.entries(chapters).map(([chapter, chapterQuestions]: [string, any]) => (
                       <div key={chapter} className="ml-6 space-y-3">
-                        <div className="flex items-center justify-between px-2 border-l-2 border-denim/20 pl-4">
+                        <div className="flex items-center justify-between px-2 border-l-2 border-forest/20 pl-4">
                           <div className="flex items-center gap-2">
                             <h5 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{chapter}</h5>
                             <button
@@ -1019,11 +1019,11 @@ export default function AdminPanel() {
                             <motion.div 
                               key={q.id} 
                               layout
-                              className="card p-5 flex flex-col sm:flex-row justify-between items-start gap-4 hover:border-denim/30 transition-all group"
+                              className="card p-5 flex flex-col sm:flex-row justify-between items-start gap-4 hover:border-forest/30 transition-all group"
                             >
                               <div className="flex-1 w-full">
                                 <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
-                                  <span className="text-denim">Book: {q.subject}</span>
+                                  <span className="text-forest">Book: {q.subject}</span>
                                   <span>•</span>
                                   <span>Chapter: {q.chapter}</span>
                                 </div>
@@ -1047,7 +1047,7 @@ export default function AdminPanel() {
                                     const newPath = prompt('Enter new path (Book/Chapter):', currentPath);
                                     if (newPath && newPath !== currentPath) handleUpdateQuestionCategory(q.id, newPath);
                                   }}
-                                  className="flex-1 sm:p-2 p-3 bg-denim/5 text-denim rounded-xl hover:bg-denim hover:text-white transition-all flex items-center justify-center"
+                                  className="flex-1 sm:p-2 p-3 bg-forest/5 text-forest rounded-xl hover:bg-forest hover:text-white transition-all flex items-center justify-center"
                                   title="Move to Category"
                                 >
                                   <FolderInput size={16} />
@@ -1082,8 +1082,8 @@ export default function AdminPanel() {
 
         {activeTab === 'books' && (
           <motion.div key="books" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="max-w-2xl mx-auto">
-            <div className="card overflow-hidden border-2 border-denim/5 shadow-2xl shadow-denim/5">
-              <div className="bg-denim p-8 text-white relative overflow-hidden">
+            <div className="card overflow-hidden border-2 border-forest/5 shadow-2xl shadow-forest/5">
+              <div className="bg-forest p-8 text-white relative overflow-hidden">
                 <div className="relative z-10 space-y-2">
                   <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
                     <Sparkles size={24} className="text-yellow-300" />
@@ -1149,7 +1149,7 @@ export default function AdminPanel() {
                         "w-full flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-[2rem] transition-all cursor-pointer",
                         bookFile 
                           ? "border-green-200 bg-green-50/30" 
-                          : "border-gray-200 hover:border-denim hover:bg-denim/5"
+                          : "border-gray-200 hover:border-forest hover:bg-forest/5"
                       )}
                     >
                       <div className={cn(
@@ -1176,7 +1176,7 @@ export default function AdminPanel() {
                 >
                   {aiLoading ? (
                     <>
-                      <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-denim"></div>
+                      <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-forest"></div>
                       Processing Content...
                     </>
                   ) : (
@@ -1194,7 +1194,7 @@ export default function AdminPanel() {
         {activeTab === 'database' && (
           <motion.div key="database" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
             <div className="card space-y-4">
-              <h3 className="font-bold text-denim flex items-center gap-2">
+              <h3 className="font-bold text-forest flex items-center gap-2">
                 <Sparkles size={20} className="text-yellow-500" />
                 AI Student Importer
               </h3>
@@ -1211,7 +1211,7 @@ export default function AdminPanel() {
                   />
                   <label
                     htmlFor="id-cards-upload"
-                    className="w-full flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-2xl hover:border-denim hover:bg-denim/5 transition-all cursor-pointer"
+                    className="w-full flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-2xl hover:border-forest hover:bg-forest/5 transition-all cursor-pointer"
                   >
                     <Upload className="text-gray-400 mb-2" size={32} />
                     <span className="text-sm font-bold text-gray-600">
@@ -1241,7 +1241,7 @@ export default function AdminPanel() {
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-bold text-denim">Authorized Students</h3>
+              <h3 className="font-bold text-forest">Authorized Students</h3>
               {adminStudents.map(student => (
                 <div key={student.id} className="card p-4 flex justify-between items-center">
                   <div>
@@ -1263,7 +1263,7 @@ export default function AdminPanel() {
         {activeTab === 'calendar' && (
           <motion.div key="calendar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
             <div className="card space-y-4">
-              <h3 className="font-bold text-denim flex items-center gap-2">
+              <h3 className="font-bold text-forest flex items-center gap-2">
                 <Sparkles size={20} className="text-yellow-500" />
                 AI Calendar Importer
               </h3>
@@ -1280,7 +1280,7 @@ export default function AdminPanel() {
                   />
                   <label
                     htmlFor="calendar-upload"
-                    className="w-full flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-2xl hover:border-denim hover:bg-denim/5 transition-all cursor-pointer"
+                    className="w-full flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-2xl hover:border-forest hover:bg-forest/5 transition-all cursor-pointer"
                   >
                     <Upload className="text-gray-400 mb-2" size={32} />
                     <span className="text-sm font-bold text-gray-600">

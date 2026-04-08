@@ -303,7 +303,7 @@ export default function QuizGame() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-denim"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-butter"></div>
       </div>
     );
   }
@@ -315,28 +315,28 @@ export default function QuizGame() {
           <motion.div 
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="w-20 h-20 bg-wine/10 rounded-[2rem] flex items-center justify-center mx-auto text-wine shadow-inner"
+            className="w-20 h-20 bg-butter rounded-[2rem] flex items-center justify-center mx-auto text-forest shadow-inner"
           >
             <Trophy size={40} />
           </motion.div>
           <div className="space-y-1">
-            <h2 className="text-4xl font-black text-wine tracking-tighter uppercase italic">
+            <h2 className="text-4xl font-black text-butter tracking-tighter uppercase italic">
               {selectedSubject ? selectedSubject : "Select Book"}
             </h2>
-            <p className="text-gray-500 font-bold text-sm tracking-widest uppercase opacity-60">
+            <p className="text-butter/40 font-bold text-sm tracking-widest uppercase opacity-60">
               {selectedSubject ? "Choose a chapter to begin your quest" : "Pick a book to master"}
             </p>
           </div>
         </div>
 
         {subjects.length === 0 ? (
-          <div className="p-12 text-center space-y-6 card bg-white border-2 border-dashed border-gray-100">
-            <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
-              <AlertCircle className="text-gray-300" size={48} />
+          <div className="p-12 text-center space-y-6 card bg-butter border-2 border-dashed border-forest/10">
+            <div className="w-24 h-24 bg-forest/5 rounded-full flex items-center justify-center mx-auto">
+              <AlertCircle className="text-forest/20" size={48} />
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-black text-gray-800">The Library is Empty</h2>
-              <p className="text-gray-500 max-w-xs mx-auto font-medium">The grandmasters haven't prepared any books yet. Check back soon!</p>
+              <h2 className="text-2xl font-black text-forest">The Library is Empty</h2>
+              <p className="text-forest/60 max-w-xs mx-auto font-medium">The grandmasters haven't prepared any books yet. Check back soon!</p>
             </div>
           </div>
         ) : (
@@ -352,14 +352,14 @@ export default function QuizGame() {
                     whileHover={{ y: -5, scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setSelectedSubject(subject)}
-                    className="card p-8 flex flex-col items-center gap-6 hover:border-wine transition-all group bg-white border-2 border-gray-50 shadow-xl shadow-gray-200/50"
+                    className="card p-8 flex flex-col items-center gap-6 hover:border-forest transition-all group bg-butter border-2 border-forest/10 shadow-xl shadow-black/10"
                   >
-                    <div className="w-20 h-20 bg-wine/5 rounded-3xl flex items-center justify-center text-wine group-hover:bg-wine group-hover:text-white transition-all shadow-inner">
+                    <div className="w-20 h-20 bg-forest/5 rounded-3xl flex items-center justify-center text-forest group-hover:bg-forest group-hover:text-butter transition-all shadow-inner">
                       <Book size={40} strokeWidth={2.5} />
                     </div>
                     <div className="text-center space-y-1">
-                      <h3 className="text-xl font-black text-gray-800 group-hover:text-wine transition-all uppercase tracking-tight">{subject}</h3>
-                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                      <h3 className="text-xl font-black text-forest group-hover:text-forest transition-all uppercase tracking-tight">{subject}</h3>
+                      <p className="text-[10px] font-black text-forest/40 uppercase tracking-widest">
                         {allQuestions.filter(q => (q.subject || 'Uncategorized') === subject).length} Questions Available
                       </p>
                     </div>
@@ -371,11 +371,11 @@ export default function QuizGame() {
                 <div className="flex items-center justify-between px-2">
                   <button 
                     onClick={() => setSelectedSubject(null)}
-                    className="text-wine font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-wine/5 px-4 py-2 rounded-full transition-all"
+                    className="text-butter font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-white/5 px-4 py-2 rounded-full transition-all"
                   >
                     ← Back to Books
                   </button>
-                  <div className="h-px flex-1 bg-wine/10 mx-4"></div>
+                  <div className="h-px flex-1 bg-white/10 mx-4"></div>
                 </div>
                 
                 <div className="grid gap-3">
@@ -391,20 +391,20 @@ export default function QuizGame() {
                         setSelectedChapter(chapter);
                         startQuiz(chapter);
                       }}
-                      className="card p-6 flex items-center justify-between hover:border-wine transition-all group bg-white border-2 border-gray-50 shadow-lg shadow-gray-200/30"
+                      className="card p-6 flex items-center justify-between hover:border-forest transition-all group bg-butter border-2 border-forest/10 shadow-lg shadow-black/10"
                     >
                       <div className="flex items-center gap-5">
-                        <div className="w-14 h-14 bg-wine/5 rounded-2xl flex items-center justify-center text-wine group-hover:bg-wine group-hover:text-white transition-all shadow-inner">
+                        <div className="w-14 h-14 bg-forest/5 rounded-2xl flex items-center justify-center text-forest group-hover:bg-forest group-hover:text-butter transition-all shadow-inner">
                           <CheckCircle size={28} strokeWidth={2.5} />
                         </div>
                         <div className="text-left">
-                          <h3 className="text-lg font-black text-gray-800 group-hover:text-wine transition-all tracking-tight">{chapter}</h3>
-                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                          <h3 className="text-lg font-black text-forest group-hover:text-forest transition-all tracking-tight">{chapter}</h3>
+                          <p className="text-[10px] font-black text-forest/40 uppercase tracking-widest">
                             {allQuestions.filter(q => (q.subject || 'Uncategorized') === selectedSubject && (q.chapter || 'Default') === chapter).length} Challenges
                           </p>
                         </div>
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-300 group-hover:bg-wine/10 group-hover:text-wine transition-all">
+                      <div className="w-10 h-10 rounded-full bg-forest/5 flex items-center justify-center text-forest/20 group-hover:bg-forest/10 group-hover:text-forest transition-all">
                         <ChevronRight size={20} strokeWidth={3} />
                       </div>
                     </motion.button>
@@ -421,9 +421,9 @@ export default function QuizGame() {
   if (questions.length === 0) {
     return (
       <div className="p-8 text-center space-y-4">
-        <AlertCircle className="mx-auto text-wine" size={48} />
-        <h2 className="text-xl font-bold text-wine">No questions available</h2>
-        <p className="text-gray-500">Check back later when the admin adds some quizzes!</p>
+        <AlertCircle className="mx-auto text-butter" size={48} />
+        <h2 className="text-xl font-bold text-butter">No questions available</h2>
+        <p className="text-butter/60">Check back later when the admin adds some quizzes!</p>
       </div>
     );
   }
@@ -431,34 +431,34 @@ export default function QuizGame() {
   const currentQuestion = questions[currentIndex];
 
   const renderHeader = () => (
-    <div className="sticky top-0 z-40 bg-ivory/80 backdrop-blur-md pb-4 pt-2">
+    <div className="sticky top-0 z-40 bg-forest/80 backdrop-blur-md pb-4 pt-2">
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
-          <Star className="text-yellow-500" size={18} />
-          <span className="font-black text-wine">{xpGained - xpLost} <b>BRAIN GAINS</b></span>
+        <div className="flex items-center gap-2 bg-butter px-4 py-2 rounded-full shadow-sm border border-forest/10">
+          <Star className="text-yellow-600" size={18} />
+          <span className="font-black text-forest">{xpGained - xpLost} <b>BRAIN GAINS</b></span>
         </div>
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 bg-denim/10 px-4 py-2 rounded-full border border-denim/20">
-            <Book className="text-denim" size={16} />
-            <span className="font-black text-denim text-[10px] uppercase tracking-widest">
+          <div className="hidden sm:flex items-center gap-2 bg-butter px-4 py-2 rounded-full border border-forest/10">
+            <Book className="text-forest" size={16} />
+            <span className="font-black text-forest text-[10px] uppercase tracking-widest">
               Progress {totalQuestionsAttended % 15}/15
             </span>
           </div>
-          <div className="flex items-center gap-2 bg-wine/5 px-4 py-2 rounded-full border border-wine/10">
-            <Trophy className="text-wine" size={18} />
+          <div className="flex items-center gap-2 bg-butter px-4 py-2 rounded-full border border-forest/10">
+            <Trophy className="text-forest" size={18} />
             <motion.span 
               key={userTotalXp}
-              initial={{ scale: 1.5, color: "#fbbf24" }}
-              animate={{ scale: 1, color: "#722F37" }}
-              className="font-black text-wine text-sm"
+              initial={{ scale: 1.5, color: "#003631" }}
+              animate={{ scale: 1, color: "#003631" }}
+              className="font-black text-forest text-sm"
             >
               {userTotalXp}
             </motion.span>
           </div>
           {!gameOver && (
-            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
-              <Timer className="text-wine" size={18} />
-              <span className="font-black text-wine">{currentIndex + 1}/{questions.length}</span>
+            <div className="flex items-center gap-2 bg-butter px-4 py-2 rounded-full shadow-sm border border-forest/10">
+              <Timer className="text-forest" size={18} />
+              <span className="font-black text-forest">{currentIndex + 1}/{questions.length}</span>
             </div>
           )}
         </div>
@@ -495,23 +495,23 @@ export default function QuizGame() {
             }}
             className={cn(
               "text-white px-10 py-6 rounded-[2.5rem] shadow-2xl flex flex-col items-center gap-2 border-4",
-              isMilestone ? "bg-wine border-yellow-400" : (animValue > 0 ? "bg-green-600 border-green-400" : "bg-red-600 border-red-400")
+              isMilestone ? "bg-butter border-yellow-400 text-forest" : (animValue > 0 ? "bg-green-600 border-green-400" : "bg-red-600 border-red-400")
             )}
           >
             {isMilestone ? (
               <div className="relative">
-                <Trophy className="text-yellow-400" size={48} />
+                <Trophy className="text-yellow-600" size={48} />
                 <motion.div
                   animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 1 }}
-                  className="absolute -top-4 -right-4 text-yellow-300"
+                  className="absolute -top-4 -right-4 text-yellow-500"
                 >
                   <PartyPopper size={32} />
                 </motion.div>
                 <motion.div
                   animate={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 1, delay: 0.5 }}
-                  className="absolute -top-4 -left-4 text-yellow-300"
+                  className="absolute -top-4 -left-4 text-yellow-500"
                 >
                   <PartyPopper size={32} className="-scale-x-100" />
                 </motion.div>
@@ -520,14 +520,14 @@ export default function QuizGame() {
               animValue > 0 ? <Star className="text-yellow-300 fill-yellow-300" size={32} /> : <AlertCircle size={32} />
             )}
             <div className="text-center">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80">
+              <p className={cn("text-[10px] font-black uppercase tracking-[0.2em] opacity-80", isMilestone ? "text-forest/60" : "text-white/80")}>
                 {isMilestone ? "Milestone Reward" : (animValue > 0 ? "Brain Gain" : "Brain Drain")}
               </p>
-              <span className={cn("font-black", isMilestone ? "text-6xl" : "text-3xl")}>
+              <span className={cn("font-black", isMilestone ? "text-6xl text-forest" : "text-3xl text-white")}>
                 {animValue > 0 ? `+${animValue}` : animValue}
               </span>
               {isMilestone && (
-                <p className="text-[10px] font-black uppercase tracking-widest mt-1 text-yellow-200">
+                <p className="text-[10px] font-black uppercase tracking-widest mt-1 text-yellow-700">
                   Points Earned!
                 </p>
               )}
@@ -544,36 +544,36 @@ export default function QuizGame() {
         {renderHeader()}
         {renderAnimation()}
         <div className="flex flex-col items-center justify-center text-center space-y-6 pt-4">
-          <div className="w-24 h-24 bg-wine/10 rounded-full flex items-center justify-center text-wine">
+          <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center text-butter">
             <Trophy size={48} />
           </div>
-          <h2 className="text-3xl font-black text-wine">Quiz Complete!</h2>
+          <h2 className="text-3xl font-black text-butter">Quiz Complete!</h2>
           {isSubmitting && (
-            <div className="flex items-center gap-2 text-denim animate-pulse">
-              <div className="w-2 h-2 bg-denim rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-denim rounded-full animate-bounce [animation-delay:0.2s]"></div>
-              <div className="w-2 h-2 bg-denim rounded-full animate-bounce [animation-delay:0.4s]"></div>
+            <div className="flex items-center gap-2 text-butter animate-pulse">
+              <div className="w-2 h-2 bg-butter rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-butter rounded-full animate-bounce [animation-delay:0.2s]"></div>
+              <div className="w-2 h-2 bg-butter rounded-full animate-bounce [animation-delay:0.4s]"></div>
               <span className="text-xs font-bold uppercase tracking-widest">Syncing <b>BRAIN GAINS</b>...</span>
             </div>
           )}
-          <div className="card w-full p-6 space-y-4">
+          <div className="card w-full p-6 space-y-4 bg-butter border-forest/10">
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 font-bold uppercase text-xs tracking-widest"><b>BRAIN GAINS</b> Gained</span>
-              <span className="text-2xl font-black text-green-500">+{xpGained}</span>
+              <span className="text-forest/40 font-bold uppercase text-xs tracking-widest"><b>BRAIN GAINS</b> Gained</span>
+              <span className="text-2xl font-black text-green-600">+{xpGained}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 font-bold uppercase text-xs tracking-widest"><b>BRAIN GAINS</b> Lost</span>
-              <span className="text-2xl font-black text-red-500">-{xpLost}</span>
+              <span className="text-forest/40 font-bold uppercase text-xs tracking-widest"><b>BRAIN GAINS</b> Lost</span>
+              <span className="text-2xl font-black text-red-600">-{xpLost}</span>
             </div>
-            <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
-              <span className="text-gray-800 font-black uppercase text-sm tracking-widest">Net Result</span>
-              <span className="text-3xl font-black text-wine">{xpGained - xpLost} <b>BRAIN GAINS</b></span>
+            <div className="pt-4 border-t border-forest/10 flex justify-between items-center">
+              <span className="text-forest font-black uppercase text-sm tracking-widest">Net Result</span>
+              <span className="text-3xl font-black text-forest">{xpGained - xpLost} <b>BRAIN GAINS</b></span>
             </div>
           </div>
 
           {/* Question Summary */}
           <div className="w-full space-y-3">
-            <p className="text-xs font-black uppercase text-gray-400 tracking-widest text-left">Quiz Summary</p>
+            <p className="text-xs font-black uppercase text-butter/40 tracking-widest text-left">Quiz Summary</p>
             <div className="flex flex-wrap gap-2 justify-center">
               {quizResults.map((res, i) => (
                 <div 
@@ -592,14 +592,14 @@ export default function QuizGame() {
           <div className="flex flex-col gap-3 w-full">
             <button 
               onClick={() => startQuiz()} 
-              className="btn-primary w-full bg-wine/10 text-wine border-wine/20 hover:bg-wine/20"
+              className="btn-primary w-full bg-white/10 text-butter border-white/20 hover:bg-white/20"
             >
               Play Again
               <ChevronRight size={20} />
             </button>
             <button 
               onClick={() => window.location.reload()} 
-              className="text-gray-400 font-bold text-sm hover:text-wine transition-colors"
+              className="text-butter/40 font-bold text-sm hover:text-butter transition-colors"
             >
               Back to Menu
             </button>
@@ -631,12 +631,12 @@ export default function QuizGame() {
       </AnimatePresence>
 
       <div className="space-y-6">
-        <div className="card bg-white border-2 border-wine/10 p-8 min-h-[200px] flex flex-col justify-center relative overflow-hidden">
-          <div className="absolute top-4 left-4 bg-wine/5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-wine/60 flex items-center gap-2">
+        <div className="card bg-butter border-2 border-forest/10 p-8 min-h-[200px] flex flex-col justify-center relative overflow-hidden">
+          <div className="absolute top-4 left-4 bg-forest/5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-forest/60 flex items-center gap-2">
             <span>Chapter: {currentQuestion.chapter}</span>
           </div>
-          <h3 className="text-xl font-bold leading-tight mt-4 text-wine">{currentQuestion.question}</h3>
-          <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-wine/5 rounded-full blur-2xl"></div>
+          <h3 className="text-xl font-bold leading-tight mt-4 text-forest">{currentQuestion.question}</h3>
+          <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-forest/5 rounded-full blur-2xl"></div>
         </div>
 
         <div className="space-y-3">
@@ -644,11 +644,11 @@ export default function QuizGame() {
             const isSelected = selectedOption === idx;
             const isCorrectOption = idx === currentQuestion.correctIndex;
             
-            let statusClass = "bg-white border-gray-100 hover:border-wine text-wine";
+            let statusClass = "bg-butter border-forest/10 hover:border-forest text-forest";
             if (selectedOption !== null) {
-              if (isCorrectOption) statusClass = "bg-green-50 border-green-500 text-green-700";
-              else if (isSelected) statusClass = "bg-red-50 border-red-500 text-red-700";
-              else statusClass = "bg-gray-50 border-gray-100 opacity-50 text-wine/40";
+              if (isCorrectOption) statusClass = "bg-green-500/20 border-green-500 text-green-700";
+              else if (isSelected) statusClass = "bg-red-500/20 border-red-500 text-red-700";
+              else statusClass = "bg-butter border-forest/10 opacity-50 text-forest/40";
             }
 
             return (
@@ -674,10 +674,10 @@ export default function QuizGame() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="bg-red-50 p-4 rounded-2xl border border-red-100 flex items-center gap-3"
+            className="bg-red-500/10 p-4 rounded-2xl border border-red-500/20 flex items-center gap-3"
           >
             <AlertCircle className="text-red-500" size={20} />
-            <p className="text-xs font-bold text-red-700">
+            <p className="text-xs font-bold text-red-400">
               Warning: {consecutiveWrong}/10 consecutive wrong answers. 
               <span className="block font-medium opacity-70">10 wrong answers will deduct 2 <b>BRAIN GAINS</b>!</span>
             </p>

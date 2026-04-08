@@ -56,10 +56,10 @@ export default function Layout({ user }: LayoutProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <header className="bg-white px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-denim">SchoolQuiz</h1>
+      <header className="bg-butter px-6 py-4 border-b border-forest/10 flex justify-between items-center">
+        <h1 className="text-xl font-bold text-forest">SchoolQuiz</h1>
         <Link to={`/profile/${user?.uid}`} className="relative group">
-          <div className="w-10 h-10 rounded-2xl bg-gray-50 border-2 border-gray-100 overflow-hidden transition-all group-hover:border-denim group-active:scale-95">
+          <div className="w-10 h-10 rounded-2xl bg-forest/5 border-2 border-forest/10 overflow-hidden transition-all group-hover:border-forest group-active:scale-95">
             {userData?.photoUrl ? (
               <img 
                 src={userData.photoUrl} 
@@ -68,7 +68,7 @@ export default function Layout({ user }: LayoutProps) {
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <div className="w-full h-full flex items-center justify-center text-forest/40">
                 <User size={20} />
               </div>
             )}
@@ -80,7 +80,7 @@ export default function Layout({ user }: LayoutProps) {
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-xl bg-white/40 backdrop-blur-2xl border border-white/60 px-8 py-4 flex justify-between items-center shadow-2xl shadow-denim/10 md:bottom-8 md:rounded-[2.5rem] z-50">
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-xl bg-butter/40 backdrop-blur-2xl border border-forest/10 px-8 py-4 flex justify-between items-center shadow-2xl shadow-forest/10 md:bottom-8 md:rounded-[2.5rem] z-50">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -90,7 +90,7 @@ export default function Layout({ user }: LayoutProps) {
               to={item.path}
               className={cn(
                 "flex flex-col items-center gap-1 transition-all relative p-2 rounded-2xl",
-                isActive ? "text-denim scale-110 bg-white/60 shadow-lg shadow-denim/5 border border-white/80" : "text-gray-400 hover:text-gray-600"
+                isActive ? "text-forest scale-110 bg-forest/10 shadow-lg shadow-forest/5 border border-forest/20" : "text-forest/40 hover:text-forest/60"
               )}
             >
               <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />

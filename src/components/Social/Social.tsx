@@ -59,11 +59,11 @@ const MONTH_COLORS = [
 ];
 
 const DAILY_COLORS = [
-  'bg-[#8B5E3C] text-white',     // Nutmeg
-  'bg-[#C06C4D] text-white',     // Cinnamon
-  'bg-[#B8977E] text-white',     // Latte
-  'bg-[#9E4638] text-white',     // Umber
-  'bg-[#7B4B31] text-white',     // Cocoa
+  'bg-forest text-white',
+  'bg-forest/80 text-white',
+  'bg-forest/60 text-white',
+  'bg-forest/40 text-butter',
+  'bg-forest/20 text-butter',
 ];
 
 export default function Calendar() {
@@ -71,6 +71,7 @@ export default function Calendar() {
   const [view, setView] = useState<'agenda' | 'grid'>('grid');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -99,6 +100,7 @@ export default function Calendar() {
         } as Event;
       });
       setEvents(eventsData);
+      setLoading(false);
     }, (err: any) => {
       console.error("Calendar Snapshot Error:", err);
       if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
@@ -157,9 +159,9 @@ export default function Calendar() {
 
     if (filteredEvents.length === 0) {
       return (
-        <div className="text-center py-12 bg-white rounded-[2.5rem] border-2 border-dashed border-gray-100">
-          <CalendarIcon className="mx-auto text-gray-200 mb-2" size={48} />
-          <p className="text-gray-400 font-medium italic">No events scheduled for this period</p>
+        <div className="text-center py-12 bg-white/5 rounded-[2.5rem] border-2 border-dashed border-white/10">
+          <CalendarIcon className="mx-auto text-butter/20 mb-2" size={48} />
+          <p className="text-butter/40 font-medium italic">No events scheduled for this period</p>
         </div>
       );
     }
@@ -349,24 +351,32 @@ export default function Calendar() {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-forest"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 space-y-6 pb-24 bg-[#F8F8F8] min-h-full">
+    <div className="p-6 space-y-6 pb-24 bg-butter min-h-full">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm hover:bg-black hover:text-white transition-all group"
+            className="w-10 h-10 rounded-full bg-forest/5 border border-forest/10 flex items-center justify-center shadow-sm hover:bg-forest hover:text-butter transition-all group"
           >
             <ArrowLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
           </button>
 
-          <div className="flex gap-2 bg-white p-1 rounded-full shadow-sm border border-gray-100">
+          <div className="flex gap-2 bg-forest/5 p-1 rounded-full shadow-sm border border-forest/10">
             <button 
               onClick={() => setView('agenda')}
               className={cn(
                 "px-4 py-2 rounded-full text-xs font-bold transition-all",
-                view === 'agenda' ? "bg-black text-white" : "text-gray-400"
+                view === 'agenda' ? "bg-forest text-butter" : "text-forest/40"
               )}
             >
               Agenda
@@ -375,7 +385,7 @@ export default function Calendar() {
               onClick={() => setView('grid')}
               className={cn(
                 "px-4 py-2 rounded-full text-xs font-bold transition-all",
-                view === 'grid' ? "bg-black text-white" : "text-gray-400"
+                view === 'grid' ? "bg-forest text-butter" : "text-forest/40"
               )}
             >
               Grid
@@ -386,7 +396,7 @@ export default function Calendar() {
         {isAdmin && (
           <button 
             onClick={() => setShowAddModal(true)}
-            className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm hover:bg-black hover:text-white transition-all"
+            className="w-10 h-10 rounded-full bg-forest/5 border border-forest/10 flex items-center justify-center shadow-sm hover:bg-forest hover:text-butter transition-all"
           >
             <Plus size={20} />
           </button>
@@ -396,15 +406,15 @@ export default function Calendar() {
       {/* Month Selector - Only in Agenda View */}
       {view === 'agenda' && (
         <div className="flex items-center justify-center gap-8 py-2">
-          <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="text-gray-300 hover:text-black">
+          <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="text-butter/20 hover:text-butter">
             <ChevronLeft size={20} />
           </button>
           <div className="flex items-center gap-4">
-            <span className="text-xs font-bold uppercase tracking-widest text-gray-300">{format(subMonths(currentDate, 1), 'MMM')}</span>
-            <h2 className="text-xl font-black uppercase tracking-widest">{format(currentDate, 'MMM')}</h2>
-            <span className="text-xs font-bold uppercase tracking-widest text-gray-300">{format(addMonths(currentDate, 1), 'MMM')}</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-butter/20">{format(subMonths(currentDate, 1), 'MMM')}</span>
+            <h2 className="text-xl font-black uppercase tracking-widest text-butter">{format(currentDate, 'MMM')}</h2>
+            <span className="text-xs font-bold uppercase tracking-widest text-butter/20">{format(addMonths(currentDate, 1), 'MMM')}</span>
           </div>
-          <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="text-gray-300 hover:text-black">
+          <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="text-butter/20 hover:text-butter">
             <ChevronRight size={20} />
           </button>
         </div>
@@ -433,23 +443,23 @@ export default function Calendar() {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              className="bg-white rounded-[2.5rem] p-8 w-full max-w-md space-y-6 relative"
+              className="bg-forest rounded-[2.5rem] p-8 w-full max-w-md space-y-6 relative border border-white/10"
             >
               <button 
                 onClick={() => setShowAddModal(false)}
-                className="absolute right-6 top-6 text-gray-400 hover:text-black"
+                className="absolute right-6 top-6 text-butter/40 hover:text-butter"
               >
                 <X size={24} />
               </button>
 
               <div className="space-y-1">
-                <h3 className="text-2xl font-black tracking-tight">Add Event</h3>
-                <p className="text-sm text-gray-500 font-medium">Schedule a new activity for the students.</p>
+                <h3 className="text-2xl font-black tracking-tight text-butter">Add Event</h3>
+                <p className="text-sm text-butter/60 font-medium">Schedule a new activity for the students.</p>
               </div>
 
               <form onSubmit={handleAddEvent} className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Event Title</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-butter/40 ml-2">Event Title</label>
                   <input 
                     required
                     type="text" 
@@ -462,7 +472,7 @@ export default function Calendar() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Start Date</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-butter/40 ml-2">Start Date</label>
                     <input 
                       required
                       type="date" 
@@ -472,7 +482,7 @@ export default function Calendar() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">End Date (Optional)</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-butter/40 ml-2">End Date (Optional)</label>
                     <input 
                       type="date" 
                       className="input-field"
@@ -483,7 +493,7 @@ export default function Calendar() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Description (Optional)</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-butter/40 ml-2">Description (Optional)</label>
                   <textarea 
                     placeholder="Details about the event..." 
                     className="input-field min-h-[100px] py-4"
@@ -492,7 +502,7 @@ export default function Calendar() {
                   />
                 </div>
 
-                <button type="submit" className="btn-primary w-full py-5 rounded-3xl bg-black hover:bg-gray-800">
+                <button type="submit" className="btn-primary w-full py-5 rounded-3xl">
                   Create Event
                 </button>
               </form>
@@ -509,25 +519,25 @@ export default function Calendar() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-[2.5rem] p-8 w-full max-w-sm space-y-6 text-center"
+              className="bg-forest rounded-[2.5rem] p-8 w-full max-w-sm space-y-6 text-center border border-white/10"
             >
-              <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto">
                 <Trash2 size={32} />
               </div>
               <div>
-                <h4 className="text-xl font-bold text-gray-800">Delete Event?</h4>
-                <p className="text-gray-500 text-sm mt-2">This action cannot be undone. The event will be permanently removed.</p>
+                <h4 className="text-xl font-bold text-butter">Delete Event?</h4>
+                <p className="text-butter/60 text-sm mt-2">This action cannot be undone. The event will be permanently removed.</p>
               </div>
               <div className="flex gap-3">
                 <button
                   onClick={() => setConfirmDeleteId(null)}
-                  className="flex-1 py-3 rounded-2xl font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all"
+                  className="flex-1 py-3 rounded-2xl font-bold bg-white/5 text-butter hover:bg-white/10 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="flex-1 py-3 rounded-2xl font-bold bg-red-500 text-white hover:bg-red-600 transition-all shadow-lg shadow-red-100"
+                  className="flex-1 py-3 rounded-2xl font-bold bg-red-500 text-white hover:bg-red-600 transition-all shadow-lg shadow-red-500/20"
                 >
                   Delete
                 </button>

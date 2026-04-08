@@ -1,17 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-ivory: #FFFCEF;
-  --color-denim: #659BB9;
-  --color-denim-dark: #4A7A96;
-  --color-wine: #722F37;
+  --color-butter: #FFEDA8;
+  --color-forest: #003631;
+  --color-forest-dark: #002521;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
 }
 
 @layer base {
   body {
-    @apply bg-ivory text-gray-800 font-sans min-h-screen;
+    @apply bg-forest text-butter font-sans min-h-screen;
+  }
+  h1, h2, h3, .font-serif {
+    @apply font-serif;
   }
 }
 
@@ -24,49 +27,48 @@
 }
 
 .app-container {
-  @apply w-full max-w-7xl mx-auto min-h-screen bg-ivory shadow-xl relative flex flex-col md:rounded-[2.5rem] md:my-8 md:min-h-[calc(100vh-4rem)];
+  @apply w-full max-w-7xl mx-auto min-h-screen bg-forest shadow-2xl relative flex flex-col md:rounded-[2.5rem] md:my-8 md:min-h-[calc(100vh-4rem)];
 }
 
 .btn-primary {
-  @apply relative overflow-hidden backdrop-blur-xl bg-white/40 text-denim px-6 py-4 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all duration-300 border border-white/60 active:scale-95 disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2;
+  @apply relative overflow-hidden bg-butter text-forest px-6 py-4 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all duration-300 border border-forest/20 active:scale-95 disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2;
   box-shadow: 
-    inset 0 2px 4px rgba(255, 255, 255, 0.9),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.05),
-    0 15px 35px -5px rgba(101, 155, 185, 0.25),
-    0 5px 15px -5px rgba(0, 0, 0, 0.1);
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+    0 15px 35px -5px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary:hover {
-  @apply bg-white/60 -translate-y-1 shadow-2xl shadow-denim/30;
+  @apply bg-butter/90 -translate-y-1 shadow-2xl shadow-butter/20;
 }
 
 .btn-secondary {
-  @apply relative overflow-hidden backdrop-blur-lg bg-white/20 text-denim px-6 py-4 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all duration-300 border border-white/40 active:scale-95 flex items-center justify-center gap-2;
+  @apply relative overflow-hidden bg-butter/10 backdrop-blur-lg text-butter px-6 py-4 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all duration-300 border border-butter/20 active:scale-95 flex items-center justify-center gap-2;
   box-shadow: 
-    inset 0 1px 2px rgba(255, 255, 255, 0.5),
-    0 10px 20px -10px rgba(0, 0, 0, 0.1);
+    inset 0 1px 2px rgba(255, 255, 255, 0.05),
+    0 10px 20px -10px rgba(0, 0, 0, 0.3);
 }
 
 .btn-secondary:hover {
-  @apply bg-white/40 -translate-y-0.5 shadow-lg;
+  @apply bg-white/10 -translate-y-0.5 shadow-lg;
 }
 
 .card {
-  @apply bg-white/60 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/80 transition-all duration-300;
+  @apply bg-butter text-forest p-6 rounded-[2.5rem] border border-forest/10 transition-all duration-300;
   box-shadow: 
-    0 20px 40px -20px rgba(0, 0, 0, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 1);
+    0 20px 40px -20px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
 .card:hover {
-  @apply shadow-2xl shadow-gray-200/50;
+  @apply shadow-2xl shadow-butter/10 border-forest/20;
 }
 
 .input-field {
-  @apply w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-denim focus:ring-2 focus:ring-denim/20 outline-none transition-all;
+  @apply w-full px-4 py-3 rounded-xl border border-butter/20 bg-butter/5 text-butter placeholder:text-butter/40 focus:border-butter focus:ring-2 focus:ring-butter/20 outline-none transition-all;
 }
 
 .label {
-  @apply block text-sm font-medium text-gray-600 mb-1 ml-1;
+  @apply block text-sm font-medium text-butter/60 mb-1 ml-1;
 }
 

@@ -58,7 +58,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-denim"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-butter"></div>
       </div>
     );
   }
@@ -70,34 +70,34 @@ export default function Home() {
     <div className="p-6 space-y-8 pb-24">
       {/* Welcome Header */}
       <div className="space-y-1">
-        <h2 className="text-3xl font-black text-denim tracking-tighter uppercase italic">
+        <h2 className="text-3xl font-black text-forest tracking-tighter uppercase italic">
           Welcome, {userData?.name?.split(' ')[0] || 'Scholar'}!
         </h2>
-        <p className="text-gray-500 font-medium text-sm">Ready to sharpen your mind today?</p>
+        <p className="text-forest/60 font-medium text-sm">Ready to sharpen your mind today?</p>
       </div>
 
       {/* Stats Overview Card */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-denim rounded-[2.5rem] p-8 text-white shadow-2xl shadow-denim/20 relative overflow-hidden"
+        className="bg-butter rounded-[2.5rem] p-8 text-forest shadow-2xl shadow-black/10 relative overflow-hidden border border-forest/10"
       >
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-12 -mb-12 blur-xl"></div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-forest/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-forest/5 rounded-full -ml-12 -mb-12 blur-xl"></div>
         
         <div className="relative z-10 space-y-6">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Current Rank</p>
               <div className="flex items-center gap-2">
-                <Trophy className="text-yellow-400" size={24} />
+                <Trophy className="text-forest" size={24} />
                 <span className="text-4xl font-black italic">#{rank || '--'}</span>
               </div>
             </div>
             <div className="text-right space-y-1">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Total XP</p>
               <div className="flex items-center gap-2 justify-end">
-                <Star className="text-yellow-400 fill-yellow-400" size={20} />
+                <Star className="text-forest fill-forest" size={20} />
                 <span className="text-3xl font-black">{userData?.xp || 0}</span>
               </div>
             </div>
@@ -108,11 +108,11 @@ export default function Home() {
               <span>Level Progress</span>
               <span>{progress}% to {nextMilestone} XP</span>
             </div>
-            <div className="h-3 bg-white/10 rounded-full overflow-hidden border border-white/10">
+            <div className="h-3 bg-forest/10 rounded-full overflow-hidden border border-forest/10">
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
-                className="h-full bg-gradient-to-r from-yellow-300 to-yellow-500 shadow-[0_0_10px_rgba(253,224,71,0.5)]"
+                className="h-full bg-forest shadow-[0_0_10px_rgba(0,54,49,0.2)]"
               />
             </div>
           </div>
@@ -125,9 +125,9 @@ export default function Home() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate('/quiz')}
-          className="card p-6 bg-wine/10 text-wine border-wine/20 flex flex-col items-center gap-4 group shadow-xl shadow-wine/5"
+          className="card p-6 bg-butter text-forest border-forest/10 flex flex-col items-center gap-4 group shadow-xl shadow-black/5"
         >
-          <div className="w-12 h-12 bg-wine/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <div className="w-12 h-12 bg-forest/5 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
             <Zap size={28} className="fill-current" />
           </div>
           <div className="text-center">
@@ -140,46 +140,46 @@ export default function Home() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate('/leaderboard')}
-          className="card p-6 bg-white border-2 border-gray-50 flex flex-col items-center gap-4 group shadow-lg shadow-gray-200/50"
+          className="card p-6 bg-butter border border-forest/10 flex flex-col items-center gap-4 group shadow-lg shadow-black/5"
         >
-          <div className="w-12 h-12 bg-denim/5 rounded-2xl flex items-center justify-center text-denim group-hover:scale-110 transition-transform">
+          <div className="w-12 h-12 bg-forest/5 rounded-2xl flex items-center justify-center text-forest group-hover:scale-110 transition-transform">
             <TrendingUp size={28} />
           </div>
           <div className="text-center">
-            <p className="font-black uppercase text-sm tracking-tight text-denim">Rankings</p>
-            <p className="text-[8px] font-bold uppercase tracking-widest text-gray-400">View Board</p>
+            <p className="font-black uppercase text-sm tracking-tight text-forest">Rankings</p>
+            <p className="text-[8px] font-bold uppercase tracking-widest text-forest/40">View Board</p>
           </div>
         </motion.button>
       </div>
 
       {/* Activity Summary */}
       <div className="space-y-4">
-        <h3 className="text-xs font-black uppercase text-gray-400 tracking-[0.2em] px-2">Your Activity</h3>
+        <h3 className="text-xs font-black uppercase text-forest/40 tracking-[0.2em] px-2">Your Activity</h3>
         <div className="space-y-3">
-          <div className="card p-5 flex items-center gap-4 bg-white border-gray-50 shadow-sm">
-            <div className="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-600">
+          <div className="card p-5 flex items-center gap-4 bg-butter border-forest/10 shadow-sm">
+            <div className="w-12 h-12 bg-forest/5 rounded-2xl flex items-center justify-center text-green-600">
               <Target size={24} />
             </div>
             <div className="flex-1">
-              <p className="font-bold text-gray-800">Quizzes Completed</p>
-              <p className="text-xs text-gray-400 font-medium">Keep going to reach level 2!</p>
+              <p className="font-bold text-forest">Quizzes Completed</p>
+              <p className="text-xs text-forest/40 font-medium">Keep going to reach level 2!</p>
             </div>
             <div className="text-right">
-              <p className="text-xl font-black text-denim">{userData?.totalQuizzesPlayed || 0}</p>
+              <p className="text-xl font-black text-forest">{userData?.totalQuizzesPlayed || 0}</p>
             </div>
           </div>
 
-          <div className="card p-5 flex items-center gap-4 bg-white border-gray-50 shadow-sm">
-            <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
+          <div className="card p-5 flex items-center gap-4 bg-butter border-forest/10 shadow-sm">
+            <div className="w-12 h-12 bg-forest/5 rounded-2xl flex items-center justify-center text-blue-600">
               <Clock size={24} />
             </div>
             <div className="flex-1">
-              <p className="font-bold text-gray-800">Last Session</p>
-              <p className="text-xs text-gray-400 font-medium">
+              <p className="font-bold text-forest">Last Session</p>
+              <p className="text-xs text-forest/40 font-medium">
                 {userData?.lastQuizCompleted ? new Date(userData.lastQuizCompleted).toLocaleDateString() : 'No quizzes yet'}
               </p>
             </div>
-            <div className="text-right text-gray-300">
+            <div className="text-right text-forest/20">
               <ChevronRight size={20} />
             </div>
           </div>
@@ -187,17 +187,17 @@ export default function Home() {
       </div>
 
       {/* Featured Subject (Static for now) */}
-      <div className="card p-6 bg-gradient-to-br from-ivory to-white border-2 border-wine/5 relative overflow-hidden">
+      <div className="card p-6 bg-butter border border-forest/10 relative overflow-hidden">
         <div className="relative z-10 flex items-center gap-6">
-          <div className="w-16 h-16 bg-wine/5 rounded-3xl flex items-center justify-center text-wine shadow-inner">
+          <div className="w-16 h-16 bg-forest/5 rounded-3xl flex items-center justify-center text-forest shadow-inner">
             <BookOpen size={32} />
           </div>
           <div className="space-y-1">
-            <p className="text-[10px] font-black uppercase tracking-widest text-wine/60">Featured Topic</p>
-            <h4 className="text-xl font-black text-gray-800 tracking-tight">World History</h4>
+            <p className="text-[10px] font-black uppercase tracking-widest text-forest/60">Featured Topic</p>
+            <h4 className="text-xl font-black text-forest tracking-tight">World History</h4>
             <button 
               onClick={() => navigate('/quiz')}
-              className="text-[10px] font-black uppercase text-wine flex items-center gap-1 hover:gap-2 transition-all"
+              className="text-[10px] font-black uppercase text-forest flex items-center gap-1 hover:gap-2 transition-all"
             >
               Explore Now <ChevronRight size={12} />
             </button>

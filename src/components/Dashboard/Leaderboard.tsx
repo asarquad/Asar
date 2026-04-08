@@ -50,7 +50,7 @@ export default function Leaderboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-denim"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-butter"></div>
       </div>
     );
   }
@@ -70,24 +70,24 @@ export default function Leaderboard() {
       {/* Header */}
       <div className="flex justify-between items-start">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-denim">
+          <div className="flex items-center gap-2 text-forest">
             <Trophy size={28} className="fill-current" />
             <h2 className="text-3xl font-black tracking-tighter uppercase italic">Leaderboard</h2>
           </div>
-          <p className="text-gray-500 font-medium text-sm">Compete with students globally and rise to the top.</p>
+          <p className="text-forest/60 font-medium text-sm">Compete with students globally and rise to the top.</p>
         </div>
         <div className="flex gap-2">
           {isAdmin && (
             <button
               onClick={() => navigate('/admin')}
-              className="w-12 h-12 bg-denim text-white rounded-2xl shadow-lg flex items-center justify-center hover:bg-denim/90 transition-all"
+              className="w-12 h-12 bg-forest text-butter rounded-2xl shadow-lg flex items-center justify-center hover:bg-forest/90 transition-all"
             >
               <Shield size={24} />
             </button>
           )}
           <button
             onClick={() => setShowQR(true)}
-            className="w-12 h-12 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center text-denim hover:bg-denim hover:text-white transition-all"
+            className="w-12 h-12 bg-butter rounded-2xl shadow-sm border border-forest/10 flex items-center justify-center text-forest hover:bg-butter/90 transition-all"
           >
             <QrCode size={24} />
           </button>
@@ -122,7 +122,7 @@ export default function Leaderboard() {
                     <motion.div
                       animate={{ rotate: [0, -10, 10, 0] }}
                       transition={{ repeat: Infinity, duration: 4 }}
-                      className="absolute -top-8 left-1/2 -translate-x-1/2 text-yellow-500"
+                      className="absolute -top-8 left-1/2 -translate-x-1/2 text-yellow-600"
                     >
                       <Crown size={32} className="fill-current" />
                     </motion.div>
@@ -130,11 +130,11 @@ export default function Leaderboard() {
                   
                   <div className={cn(
                     "relative rounded-full p-1 transition-transform group-hover:scale-105 shadow-md",
-                    isFirst ? "bg-gradient-to-b from-yellow-300 to-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.4)]" : 
-                    isSecond ? "bg-gradient-to-b from-gray-200 to-gray-400" : 
-                    "bg-gradient-to-b from-amber-500 to-amber-700"
+                    isFirst ? "bg-gradient-to-b from-yellow-400 to-yellow-600 shadow-[0_0_20px_rgba(202,138,4,0.4)]" : 
+                    isSecond ? "bg-gradient-to-b from-gray-300 to-gray-500" : 
+                    "bg-gradient-to-b from-amber-600 to-amber-800"
                   )}>
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white overflow-hidden border-2 border-white">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-forest overflow-hidden border-2 border-white/20">
                       <img 
                         src={user.photoUrl || `https://ui-avatars.com/api/?name=${user.name}&background=random`} 
                         alt={user.name} 
@@ -143,8 +143,8 @@ export default function Leaderboard() {
                       />
                     </div>
                     <div className={cn(
-                      "absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white",
-                      isFirst ? "bg-yellow-500 text-white" : isSecond ? "bg-gray-400 text-white" : "bg-amber-700 text-white"
+                      "absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white/20",
+                      isFirst ? "bg-yellow-600 text-white" : isSecond ? "bg-gray-500 text-white" : "bg-amber-800 text-white"
                     )}>
                       {rank}
                     </div>
@@ -152,7 +152,7 @@ export default function Leaderboard() {
                 </div>
 
                 <div className="space-y-0.5">
-                  <p className={cn("font-black truncate w-24 sm:w-32", isFirst ? "text-lg text-denim" : "text-sm text-gray-700")}>
+                  <p className={cn("font-black truncate w-24 sm:w-32", isFirst ? "text-lg text-forest" : "text-sm text-forest/80")}>
                     {user.name}
                   </p>
                   <p className={cn("font-black", isFirst ? "text-yellow-600" : isSecond ? "text-gray-500" : "text-amber-700")}>
@@ -188,14 +188,14 @@ export default function Leaderboard() {
               onClick={() => navigate(`/profile/${user.uid}`)}
               className={cn(
                 "card flex items-center gap-4 p-4 transition-all cursor-pointer group hover:scale-[1.02]",
-                isCurrentUser ? "border-denim ring-2 ring-denim/10 bg-denim/5" : "hover:border-denim/30"
+                isCurrentUser ? "border-forest ring-2 ring-forest/10 bg-butter" : "hover:border-forest/30 bg-butter border-forest/10"
               )}
             >
-              <div className="w-8 font-black text-gray-400 text-sm">
+              <div className="w-8 font-black text-forest/20 text-sm">
                 {rank}
               </div>
               
-              <div className="w-12 h-12 rounded-full bg-gray-100 overflow-hidden border-2 border-white shadow-sm shrink-0">
+              <div className="w-12 h-12 rounded-full bg-forest/5 overflow-hidden border-2 border-forest/10 shadow-sm shrink-0">
                 <img 
                   src={user.photoUrl || `https://ui-avatars.com/api/?name=${user.name}&background=random`} 
                   alt={user.name} 
@@ -205,13 +205,13 @@ export default function Leaderboard() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-gray-800 leading-tight truncate">{user.name}</p>
-                <p className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Level 1</p>
+                <p className="font-bold text-forest leading-tight truncate">{user.name}</p>
+                <p className="text-[10px] font-bold uppercase text-forest/40 tracking-widest">Level 1</p>
               </div>
 
               <div className="text-right shrink-0">
-                <p className="text-lg font-black text-denim leading-none">{user.xp}</p>
-                <p className="text-[10px] font-bold uppercase text-gray-400 tracking-widest"><b>BRAIN GAINS</b></p>
+                <p className="text-lg font-black text-forest leading-none">{user.xp}</p>
+                <p className="text-[10px] font-bold uppercase text-forest/40 tracking-widest"><b>BRAIN GAINS</b></p>
               </div>
             </motion.div>
           );
@@ -226,14 +226,14 @@ export default function Leaderboard() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-3xl p-8 w-full max-w-xs text-center space-y-6"
+              className="bg-forest rounded-3xl p-8 w-full max-w-xs text-center space-y-6 border border-white/10"
             >
-              <h3 className="text-xl font-bold text-denim">My Profile QR</h3>
-              <div className="bg-gray-50 p-6 rounded-2xl flex justify-center">
+              <h3 className="text-xl font-bold text-butter">My Profile QR</h3>
+              <div className="bg-white p-6 rounded-2xl flex justify-center">
                 <QRCodeSVG value={`${window.location.origin}/profile/${auth.currentUser?.uid}`} size={200} />
               </div>
-              <p className="text-sm text-gray-500">Others can scan this to view your profile and achievements.</p>
-              <button onClick={() => setShowQR(false)} className="btn-primary w-full">
+              <p className="text-sm text-butter/60">Others can scan this to view your profile and achievements.</p>
+              <button onClick={() => setShowQR(false)} className="btn-primary w-full bg-butter text-forest hover:bg-butter/90">
                 Close
               </button>
             </motion.div>
