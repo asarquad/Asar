@@ -1,0 +1,5 @@
+{
+  "name": "School Quiz System",
+  "description": "A mobile-first school quiz system with student ID verification, real-time leaderboard, and MCQ-based game.",
+  "requestFramePermissions": ["camera"]
+}

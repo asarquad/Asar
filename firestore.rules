@@ -1,0 +1,160 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required, immutable)
+    //   - username: string (required)
+    //   - password: string (required, hashed)
+    //   - name: string (required, immutable)
+    //   - studentId: string (required, immutable)
+    //   - roll: string (immutable)
+    //   - grade: string (immutable)
+    //   - phone: string (immutable)
+    //   - photoUrl: string
+    //   - xp: number (required)
+    //   - achievements: list (required)
+    //   - lastUsernameChange: string (ISO 8601)
+    //   - consecutiveWrongAnswers: number
+    //   - isBanned: boolean
+    //   - bannerUrl: string
+    //
+    // Sub-collection: quizAttempts
+    // Sub-collection: quizProgress
+    //
+    // Collection: questions
+    // Document ID: {questionId}
+    // Fields:
+    //   - chapter: string (required)
+    //   - question: string (required)
+    //   - options: list (required)
+    //   - correctIndex: number (required)
+    //
+    // Collection: admin_students
+    // Document ID: {studentId}
+    // Fields:
+    //   - studentId: string (required)
+    //   - name: string (required)
+    //   - phone: string (required)
+    //   - roll: string
+    //   - grade: string
+    //
+    // Collection: events
+    // Document ID: {eventId}
+    // Fields:
+    //   - title: string (required)
+    //   - date: timestamp (required)
+    //   - time: string (required)
+    //   - description: string (required)
+    //   - createdAt: timestamp
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (request.auth.token.email == "afrajahme2@gmail.com" || 
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'));
+    }
+
+    function isValidUser(data) {
+      return data.uid is string && data.uid.size() > 0 &&
+             data.username is string && data.username.size() >= 3 && data.username.size() <= 20 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 50 &&
+             data.studentId is string &&
+             data.xp is number && data.xp >= 0 &&
+             (!('isBanned' in data) || data.isBanned is bool) &&
+             (!('role' in data) || data.role in ['admin', 'student', 'user']) &&
+             (!('photoUrl' in data) || (data.photoUrl is string && data.photoUrl.size() < 1000)) &&
+             (!('bannerUrl' in data) || (data.bannerUrl is string && data.bannerUrl.size() < 1000));
+    }
+
+    function isValidQuestion(data) {
+      return data.keys().hasAll(['chapter', 'question', 'options', 'correctIndex']) &&
+             data.chapter is string &&
+             data.question is string &&
+             data.options is list && data.options.size() >= 2 &&
+             data.correctIndex is number &&
+             (!('subject' in data) || data.subject is string);
+    }
+
+    function isValidEvent(data) {
+      return data.keys().hasAll(['title', 'date', 'time', 'description']) &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 100 &&
+             data.date is timestamp &&
+             data.time is string &&
+             data.description is string && data.description.size() < 1000 &&
+             (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      // Allow read for leaderboard and profile viewing
+      // CRITICAL: This exposes PII (studentId, phone). 
+      // Recommended: Split into users_public and users_private collections.
+      allow read: if isAuthenticated();
+      
+      allow create: if isOwner(userId) && 
+                      isValidUser(request.resource.data) && 
+                      request.resource.data.role == 'student'; // Default role
+      
+      allow update: if (isOwner(userId) && 
+                        isValidUser(request.resource.data) && 
+                        request.resource.data.uid == resource.data.uid &&
+                        request.resource.data.role == resource.data.role) || 
+                       isAdmin();
+      
+      allow delete: if isAdmin();
+
+      match /quizAttempts/{attemptId} {
+        allow read: if isAuthenticated();
+        allow create: if isOwner(userId);
+        allow update, delete: if isAdmin();
+      }
+
+      match /quizProgress/{progressId} {
+        allow read: if isAuthenticated();
+        allow create, update: if isOwner(userId);
+        allow delete: if isAdmin();
+      }
+    }
+
+    match /questions/{questionId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAdmin() && isValidQuestion(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /admin_students/{studentId} {
+      // Allow individual lookups for registration/login verification
+      allow get: if true;
+      // Only admins can list all students or modify the database
+      allow list, create, update, delete: if isAdmin();
+    }
+
+    match /events/{eventId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAdmin() && isValidEvent(request.resource.data);
+      allow delete: if isAdmin();
+    }
+  }
+}

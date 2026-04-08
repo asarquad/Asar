@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Student user profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "username": { "type": "string" },
+        "password": { "type": "string" },
+        "name": { "type": "string" },
+        "studentId": { "type": "string" },
+        "roll": { "type": "string" },
+        "grade": { "type": "string" },
+        "phone": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "xp": { "type": "number" },
+        "achievements": { "type": "array", "items": { "type": "string" } },
+        "lastUsernameChange": { "type": "string", "format": "date-time" },
+        "consecutiveWrongAnswers": { "type": "number" }
+      },
+      "required": ["uid", "username", "name", "studentId", "xp"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Quiz question",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chapter": { "type": "string" },
+        "question": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "correctIndex": { "type": "number" }
+      },
+      "required": ["chapter", "question", "options", "correctIndex"]
+    },
+    "AdminStudent": {
+      "title": "AdminStudent",
+      "description": "Pre-uploaded student record for validation",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "name": { "type": "string" },
+        "roll": { "type": "string" },
+        "grade": { "type": "string" },
+        "phone": { "type": "string" }
+      },
+      "required": ["studentId", "name", "phone"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "School calendar event",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "time": { "type": "string" },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "date", "time", "description"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/questions/{questionId}": {
+      "schema": "Question",
+      "description": "Quiz questions"
+    },
+    "/admin_students/{studentId}": {
+      "schema": "AdminStudent",
+      "description": "Pre-uploaded student database"
+    },
+    "/events/{eventId}": {
+      "schema": "Event",
+      "description": "School calendar events"
+    }
+  }
+}
