@@ -478,21 +478,27 @@ export default function AdminPanel() {
     setAiLoading(true);
     try {
       const reader = new FileReader();
-      reader.onload = async (event) => {
-        const base64 = event.target?.result as string;
-        const data = base64.split(',')[1];
-        const mimeType = bookFile.type;
-
-        const generatedQuestions = await generateQuizFromBook(bookTitle, { data, mimeType });
-        
-        if (generatedQuestions && generatedQuestions.length > 0) {
-          setReviewQuestions(generatedQuestions);
-          setBookFile(null);
-        } else {
-          showNotification("AI failed to generate questions. This could be due to a 'Permission Denied' error or an invalid API key. Please check your Gemini API key in settings.", 'error');
-        }
-      };
+      
+      const base64Promise = new Promise<string>((resolve, reject) => {
+        reader.onload = () => {
+          const base64 = (reader.result as string).split(',')[1];
+          resolve(base64);
+        };
+        reader.onerror = reject;
+      });
+      
       reader.readAsDataURL(bookFile);
+      const data = await base64Promise;
+      const mimeType = bookFile.type;
+
+      const generatedQuestions = await generateQuizFromBook(bookTitle, { data, mimeType });
+      
+      if (generatedQuestions && generatedQuestions.length > 0) {
+        setReviewQuestions(generatedQuestions);
+        setBookFile(null);
+      } else {
+        showNotification("AI failed to generate questions. This could be due to a 'Permission Denied' error or an invalid API key. Please check your Gemini API key in settings.", 'error');
+      }
     } catch (err: any) {
       if (err.code === 'resource-exhausted') {
         showNotification('Daily write limit reached. Please try again tomorrow.', 'error');
@@ -523,6 +529,7 @@ export default function AdminPanel() {
       setReviewQuestions(null);
       setBookTitle('');
       setBookSubject('');
+      setActiveTab('questions'); // Switch to Quiz tab to see the new questions
       fetchData();
     } catch (err: any) {
       handleWriteError(err, 'Import quiz');
@@ -613,10 +620,18 @@ export default function AdminPanel() {
               </div>
 
               <div className="flex gap-4 pt-4 border-t border-gray-100">
-                <button onClick={() => setReviewQuestions(null)} className="btn-secondary flex-1">Discard</button>
-                <button onClick={confirmImportQuiz} className="btn-primary flex-1 flex items-center justify-center gap-2">
-                  <CheckCircle size={20} />
-                  Import All Questions
+                <button onClick={() => setReviewQuestions(null)} className="btn-secondary flex-1" disabled={loading}>Discard</button>
+                <button 
+                  onClick={confirmImportQuiz} 
+                  disabled={loading}
+                  className="btn-primary flex-1 flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <CheckCircle size={20} />
+                  )}
+                  {loading ? 'Importing...' : 'Import All Questions'}
                 </button>
               </div>
             </motion.div>

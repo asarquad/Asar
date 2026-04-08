@@ -92,7 +92,8 @@ service cloud.firestore {
              data.options is list && data.options.size() >= 2 &&
              data.correctIndex is number &&
              (!('subject' in data) || data.subject is string) &&
-             (!('level' in data) || data.level is number);
+             (!('level' in data) || data.level is number) &&
+             (!('difficulty' in data) || data.difficulty in ['Easy', 'Medium', 'Hard']);
     }
 
     function isValidEvent(data) {
