@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, arrayUnion, query, where, setDoc, getDoc, Timestamp, writeBatch, getDocsFromServer } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
-import { Shield, Users, BookOpen, Plus, Trash2, Star, CheckCircle, AlertCircle, Lock, Key, FileText, Upload, Sparkles, FolderInput, Calendar as CalendarIcon } from 'lucide-react';
+import { Shield, Users, BookOpen, Plus, Trash2, Star, CheckCircle, AlertCircle, Lock, Key, FileText, Upload, Sparkles, FolderInput, Calendar as CalendarIcon, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
 import { generateQuizFromBook, extractStudentsFromIDCards, extractEventsFromCalendar } from '../../lib/gemini';
@@ -18,12 +18,13 @@ export default function AdminPanel() {
   const [bookFile, setBookFile] = useState<File | null>(null);
   const [bookSubject, setBookSubject] = useState('');
   const [bookTitle, setBookTitle] = useState('');
-  const [bookLevel, setBookLevel] = useState(1);
   const [idCardsFile, setIdCardsFile] = useState<File | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<{ id: string, type: 'user' | 'question' | 'admin_student' | 'ban' | 'category' | 'all_questions' | 'reset_points', subType?: 'subject' | 'chapter', parentSubject?: string } | null>(null);
   const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   const [adminStudents, setAdminStudents] = useState<any[]>([]);
   const [calendarFile, setCalendarFile] = useState<File | null>(null);
+  const [reviewQuestions, setReviewQuestions] = useState<any[] | null>(null);
+  const [reviewStudents, setReviewStudents] = useState<any[] | null>(null);
 
   useEffect(() => {
     if (notification) {
@@ -99,13 +100,22 @@ export default function AdminPanel() {
     setNotification({ message, type });
   };
 
+  const handleWriteError = (err: any, context: string) => {
+    console.error(`${context} failed:`, err);
+    if (err.message?.includes('resource-exhausted') || err.code === 'resource-exhausted') {
+      showNotification('Daily database write limit reached. Firestore free tier allows 20,000 writes/day. Please try again tomorrow.', 'error');
+    } else {
+      showNotification(err.message || 'An unexpected error occurred', 'error');
+    }
+  };
+
   const handleDeleteUser = async (userId: string) => {
     try {
       await deleteDoc(doc(db, 'users', userId));
       showNotification('User deleted successfully');
       fetchData();
     } catch (err: any) {
-      showNotification(err.message, 'error');
+      handleWriteError(err, 'Delete user');
     }
     setConfirmDelete(null);
   };
@@ -116,7 +126,7 @@ export default function AdminPanel() {
       showNotification('Question deleted successfully');
       await fetchData();
     } catch (err: any) {
-      showNotification(err.message, 'error');
+      handleWriteError(err, 'Delete question');
     }
     setConfirmDelete(null);
   };
@@ -127,7 +137,7 @@ export default function AdminPanel() {
       showNotification('Student record removed');
       await fetchData();
     } catch (err: any) {
-      showNotification(err.message, 'error');
+      handleWriteError(err, 'Delete student');
     }
     setConfirmDelete(null);
   };
@@ -140,7 +150,7 @@ export default function AdminPanel() {
       showNotification(currentStatus ? 'User unbanned' : 'User banned');
       fetchData();
     } catch (err: any) {
-      showNotification(err.message, 'error');
+      handleWriteError(err, 'Ban user');
     }
     setConfirmDelete(null);
   };
@@ -288,28 +298,49 @@ export default function AdminPanel() {
         return;
       }
 
+      setReviewStudents(students);
+      setIdCardsFile(null);
+    } catch (err: any) {
+      handleWriteError(err, 'Extract students');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const confirmImportStudents = async () => {
+    if (!reviewStudents) return;
+    setLoading(true);
+    try {
+      const batch = writeBatch(db);
       let addedCount = 0;
-      for (const student of students) {
-        // Check if student ID already exists to avoid duplicates
+      
+      // We still need to check for duplicates, but we can do it more efficiently
+      // For now, let's just use the batch for the writes
+      for (const student of reviewStudents) {
         const q = query(collection(db, 'admin_students'), where('studentId', '==', student.studentId));
         const snapshot = await getDocs(q);
         
         if (snapshot.empty) {
-          await setDoc(doc(db, 'admin_students', student.studentId), {
+          const newDocRef = doc(db, 'admin_students', student.studentId);
+          batch.set(newDocRef, {
             ...student,
             createdAt: new Date().toISOString()
           });
           addedCount++;
         }
       }
-
+      
+      if (addedCount > 0) {
+        await batch.commit();
+      }
+      
       showNotification(`Successfully added ${addedCount} new students!`);
-      setIdCardsFile(null);
+      setReviewStudents(null);
       fetchData();
     } catch (err: any) {
-      showNotification(err.message, 'error');
+      handleWriteError(err, 'Import students');
     } finally {
-      setAiLoading(false);
+      setLoading(false);
     }
   };
 
@@ -339,6 +370,7 @@ export default function AdminPanel() {
         return;
       }
 
+      const batch = writeBatch(db);
       let addedCount = 0;
       for (const event of extractedEvents) {
         try {
@@ -351,7 +383,8 @@ export default function AdminPanel() {
             continue;
           }
 
-          await addDoc(collection(db, 'events'), {
+          const newDocRef = doc(collection(db, 'events'));
+          batch.set(newDocRef, {
             ...event,
             date: Timestamp.fromDate(eventDate),
             endDate: endDate && !isNaN(endDate.getTime()) ? Timestamp.fromDate(endDate) : null,
@@ -364,6 +397,7 @@ export default function AdminPanel() {
       }
 
       if (addedCount > 0) {
+        await batch.commit();
         showNotification(`Successfully added ${addedCount} school events to the calendar!`);
       } else {
         showNotification('Failed to add any valid events from the calendar.', 'error');
@@ -371,8 +405,7 @@ export default function AdminPanel() {
       setCalendarFile(null);
       fetchData();
     } catch (err: any) {
-      console.error("Calendar Import Error:", err);
-      showNotification(err.message || 'An error occurred during calendar extraction.', 'error');
+      handleWriteError(err, 'Calendar import');
     } finally {
       setAiLoading(false);
     }
@@ -402,7 +435,7 @@ export default function AdminPanel() {
       form.reset();
       fetchData();
     } catch (err: any) {
-      showNotification(err.message, 'error');
+      handleWriteError(err, 'Add question');
     }
   };
 
@@ -417,7 +450,7 @@ export default function AdminPanel() {
       showNotification('Achievement added!');
       fetchData();
     } catch (err: any) {
-      showNotification(err.message, 'error');
+      handleWriteError(err, 'Add achievement');
     }
   };
 
@@ -434,7 +467,7 @@ export default function AdminPanel() {
       showNotification('Question moved successfully');
       fetchData();
     } catch (err: any) {
-      showNotification(err.message, 'error');
+      handleWriteError(err, 'Move question');
     }
   };
 
@@ -453,23 +486,8 @@ export default function AdminPanel() {
         const generatedQuestions = await generateQuizFromBook(bookTitle, { data, mimeType });
         
         if (generatedQuestions && generatedQuestions.length > 0) {
-          // ... existing batch logic ...
-          const batch = writeBatch(db);
-          generatedQuestions.forEach((q: any) => {
-            const newDocRef = doc(collection(db, 'questions'));
-            batch.set(newDocRef, {
-              ...q,
-              subject: bookSubject,
-              chapter: bookTitle,
-              level: bookLevel
-            });
-          });
-          await batch.commit();
-          showNotification(`Successfully generated ${generatedQuestions.length} questions for "${bookSubject} - ${bookTitle}"!`);
+          setReviewQuestions(generatedQuestions);
           setBookFile(null);
-          setBookTitle('');
-          setBookSubject('');
-          fetchData();
         } else {
           showNotification("AI failed to generate questions. This could be due to a 'Permission Denied' error or an invalid API key. Please check your Gemini API key in settings.", 'error');
         }
@@ -483,6 +501,33 @@ export default function AdminPanel() {
       }
     } finally {
       setAiLoading(false);
+    }
+  };
+
+  const confirmImportQuiz = async () => {
+    if (!reviewQuestions) return;
+    setLoading(true);
+    try {
+      const batch = writeBatch(db);
+      reviewQuestions.forEach((q: any) => {
+        const newDocRef = doc(collection(db, 'questions'));
+        batch.set(newDocRef, {
+          ...q,
+          subject: bookSubject,
+          chapter: q.chapter || bookTitle,
+          level: 1 // Default to 1 since UI level is removed
+        });
+      });
+      await batch.commit();
+      showNotification(`Successfully generated ${reviewQuestions.length} questions for "${bookSubject} - ${bookTitle}"!`);
+      setReviewQuestions(null);
+      setBookTitle('');
+      setBookSubject('');
+      fetchData();
+    } catch (err: any) {
+      handleWriteError(err, 'Import quiz');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -507,6 +552,120 @@ export default function AdminPanel() {
 
   return (
     <div className="p-6 space-y-8 relative">
+      {/* Review Questions Modal */}
+      <AnimatePresence>
+        {reviewQuestions && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-[2.5rem] p-8 w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col space-y-6"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-2xl font-black text-denim">Review Generated Quiz</h3>
+                  <div className="flex items-center gap-2">
+                    <p className={cn(
+                      "text-sm font-bold",
+                      reviewQuestions.length < 100 ? "text-orange-500" : "text-green-500"
+                    )}>
+                      {reviewQuestions.length} Questions Generated
+                    </p>
+                    {reviewQuestions.length < 100 && (
+                      <span className="text-[10px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-black animate-pulse">
+                        BELOW TARGET (100)
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <button onClick={() => setReviewQuestions(null)} className="text-gray-400 hover:text-black">
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                {reviewQuestions.map((q, idx) => (
+                  <div key={idx} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-2">
+                    <div className="flex justify-between items-start gap-4">
+                      <p className="font-bold text-sm text-gray-800"><span className="text-denim mr-2">Q{idx + 1}.</span>{q.question}</p>
+                      <span className={cn(
+                        "text-[8px] font-black uppercase px-2 py-1 rounded-full",
+                        q.difficulty === 'Easy' ? "bg-green-100 text-green-600" :
+                        q.difficulty === 'Medium' ? "bg-yellow-100 text-yellow-600" :
+                        "bg-red-100 text-red-600"
+                      )}>
+                        {q.difficulty}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {q.options.map((opt: string, oIdx: number) => (
+                        <div key={oIdx} className={cn(
+                          "text-[10px] p-2 rounded-lg border",
+                          oIdx === q.correctIndex ? "bg-green-50 border-green-200 text-green-700 font-bold" : "bg-white border-gray-100 text-gray-500"
+                        )}>
+                          {opt}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-4 pt-4 border-t border-gray-100">
+                <button onClick={() => setReviewQuestions(null)} className="btn-secondary flex-1">Discard</button>
+                <button onClick={confirmImportQuiz} className="btn-primary flex-1 flex items-center justify-center gap-2">
+                  <CheckCircle size={20} />
+                  Import All Questions
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Review Students Modal */}
+      <AnimatePresence>
+        {reviewStudents && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-[2.5rem] p-8 w-full max-w-md space-y-6"
+            >
+              <div className="flex justify-between items-center">
+                <h3 className="text-2xl font-black text-denim">Review Students</h3>
+                <button onClick={() => setReviewStudents(null)} className="text-gray-400 hover:text-black">
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="max-h-[50vh] overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+                {reviewStudents.map((s, idx) => (
+                  <div key={idx} className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                    <p className="font-black text-gray-800">{s.name}</p>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">ID: <span className="text-denim">{s.studentId}</span></p>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Roll: <span className="text-denim">{s.roll}</span></p>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Grade: <span className="text-denim">{s.grade}</span></p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-4 pt-4 border-t border-gray-100">
+                <button onClick={() => setReviewStudents(null)} className="btn-secondary flex-1">Discard</button>
+                <button onClick={confirmImportStudents} className="btn-primary flex-1 flex items-center justify-center gap-2">
+                  <CheckCircle size={20} />
+                  Authorize All
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {notification && (
           <motion.div
@@ -749,7 +908,7 @@ export default function AdminPanel() {
                 </h3>
               </div>
               <form onSubmit={handleAddQuestion} className="p-6 space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Subject</label>
                     <input name="subject" required className="input-field bg-gray-50/50" placeholder="e.g. Biology" />
@@ -757,14 +916,6 @@ export default function AdminPanel() {
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Chapter / Section</label>
                     <input name="chapter" required className="input-field bg-gray-50/50" placeholder="e.g. Cell Structure" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Level (1-10)</label>
-                    <select name="level" required className="input-field bg-gray-50/50">
-                      {[1,2,3,4,5,6,7,8,9,10].map(l => (
-                        <option key={l} value={l}>Level {l}</option>
-                      ))}
-                    </select>
                   </div>
                 </div>
                 
@@ -847,23 +998,6 @@ export default function AdminPanel() {
                               <Trash2 size={10} />
                             </button>
                           </div>
-                          <div className="flex gap-1">
-                            {[1,2,3,4,5,6,7,8,9,10].map(l => {
-                              const count = chapterQuestions.filter((q: any) => (q.level || 1) === l).length;
-                              return (
-                                <div 
-                                  key={l} 
-                                  title={`Level ${l}: ${count} questions`}
-                                  className={cn(
-                                    "w-4 h-4 rounded-full flex items-center justify-center text-[6px] font-black",
-                                    count >= 10 ? "bg-green-500 text-white" : count > 0 ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-400"
-                                  )}
-                                >
-                                  {l}
-                                </div>
-                              );
-                            })}
-                          </div>
                         </div>
                         <div className="grid grid-cols-1 gap-3">
                           {chapterQuestions.map((q: any) => (
@@ -877,8 +1011,6 @@ export default function AdminPanel() {
                                   <span>{q.subject}</span>
                                   <span>•</span>
                                   <span>{q.chapter}</span>
-                                  <span>•</span>
-                                  <span className="text-denim">Level {q.level || 1}</span>
                                 </div>
                                 <p className="font-bold text-gray-800 leading-snug">{q.question}</p>
                                 <div className="grid grid-cols-2 gap-2 mt-3">
@@ -943,7 +1075,7 @@ export default function AdminPanel() {
                   </div>
                   <h3 className="text-2xl font-black tracking-tight">AI Quiz Generator</h3>
                   <p className="text-sm text-white/70 font-medium max-w-md">
-                    Upload a photo of a book page or document, and our AI will instantly craft 10 high-quality multiple-choice questions.
+                    Upload a photo of a book page or document, and our AI will instantly craft 100 high-quality multiple-choice questions.
                   </p>
                 </div>
                 <div className="absolute -right-12 -top-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
@@ -953,7 +1085,7 @@ export default function AdminPanel() {
               </div>
 
               <form onSubmit={handleGenerateAIQuiz} className="p-8 space-y-6 bg-white">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Subject</label>
                     <input 
@@ -975,19 +1107,6 @@ export default function AdminPanel() {
                       value={bookTitle}
                       onChange={(e) => setBookTitle(e.target.value)}
                     />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Target Level</label>
-                    <select 
-                      required 
-                      className="input-field bg-gray-50 text-lg font-bold py-4" 
-                      value={bookLevel}
-                      onChange={(e) => setBookLevel(parseInt(e.target.value))}
-                    >
-                      {[1,2,3,4,5,6,7,8,9,10].map(l => (
-                        <option key={l} value={l}>Level {l}</option>
-                      ))}
-                    </select>
                   </div>
                 </div>
                 

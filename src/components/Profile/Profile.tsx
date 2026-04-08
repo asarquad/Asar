@@ -29,6 +29,7 @@ export default function Profile() {
   const [isUploading, setIsUploading] = useState<'pfp' | 'banner' | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [currentUser, setCurrentUser] = useState(auth.currentUser);
+  const [previewImage, setPreviewImage] = useState<{ url: string, file: File, type: 'pfp' | 'banner' } | null>(null);
   const navigate = useNavigate();
 
   const isOwnProfile = currentUser?.uid === uid;
@@ -184,22 +185,27 @@ export default function Profile() {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'pfp' | 'banner') => {
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>, type: 'pfp' | 'banner') => {
     const file = e.target.files?.[0];
-    if (!file || !uid) return;
+    if (!file) return;
 
-    // Check file size (max 1MB for Base64 storage)
     if (file.size > 1024 * 1024) {
       setError('File is too large. For best performance, please use an image under 1MB.');
       return;
     }
 
+    const url = URL.createObjectURL(file);
+    setPreviewImage({ url, file, type });
+  };
+
+  const handleConfirmUpload = async () => {
+    if (!previewImage || !uid) return;
+    const { file, type } = previewImage;
+
     setIsUploading(type);
     setUploadStatus('Processing image...');
     
     try {
-      console.log(`Starting ${type} conversion to Base64...`);
-      
       const reader = new FileReader();
       const base64Promise = new Promise<string>((resolve, reject) => {
         reader.onload = () => resolve(reader.result as string);
@@ -208,23 +214,18 @@ export default function Profile() {
       });
 
       const base64String = await base64Promise;
-      console.log('Image converted to Base64 successfully');
-      
       setUploadStatus('Saving to database...');
       const updatePayload = type === 'pfp' ? { photoUrl: base64String } : { bannerUrl: base64String };
       
       await updateDoc(doc(db, 'users', uid), updatePayload);
-      console.log('Firestore document updated with Base64 image');
-      
       setUserData((prev: any) => ({ ...prev, ...updatePayload }));
       setError('');
-      setUploadStatus('');
+      setPreviewImage(null);
     } catch (err: any) {
-      console.error('Upload error:', err);
       setError(`Failed to save ${type}: ${err.message}`);
-      setUploadStatus('');
     } finally {
       setIsUploading(null);
+      setUploadStatus('');
     }
   };
 
@@ -268,15 +269,8 @@ export default function Profile() {
           
           {isOwnProfile && (
             <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-              <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'banner')} />
-              {isUploading === 'banner' ? (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-white"></div>
-                  <span className="text-white text-xs font-bold drop-shadow-md">{uploadStatus}</span>
-                </div>
-              ) : (
-                <Camera className="text-white" size={32} />
-              )}
+              <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageSelect(e, 'banner')} />
+              <Camera className="text-white" size={32} />
             </label>
           )}
         </div>
@@ -295,15 +289,8 @@ export default function Profile() {
             
             {isOwnProfile && (
               <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer rounded-3xl">
-                <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'pfp')} />
-                {isUploading === 'pfp' ? (
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-white"></div>
-                    <span className="text-white text-[8px] font-bold drop-shadow-md whitespace-nowrap">{uploadStatus}</span>
-                  </div>
-                ) : (
-                  <Camera className="text-white" size={24} />
-                )}
+                <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageSelect(e, 'pfp')} />
+                <Camera className="text-white" size={24} />
               </label>
             )}
           </div>
@@ -526,6 +513,48 @@ export default function Profile() {
           </div>
         </div>
       )}
+
+      {/* Image Preview Modal */}
+      <AnimatePresence>
+        {previewImage && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] flex items-center justify-center p-6">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-[2.5rem] p-8 w-full max-w-md space-y-6 text-center"
+            >
+              <h3 className="text-2xl font-black text-denim">Confirm New {previewImage.type === 'pfp' ? 'Profile Picture' : 'Banner'}</h3>
+              
+              <div className={cn(
+                "overflow-hidden bg-gray-100 mx-auto",
+                previewImage.type === 'pfp' ? "w-48 h-48 rounded-3xl" : "w-full h-32 rounded-2xl"
+              )}>
+                <img src={previewImage.url} alt="Preview" className="w-full h-full object-cover" />
+              </div>
+
+              {isUploading ? (
+                <div className="space-y-3">
+                  <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                    <motion.div 
+                      className="bg-denim h-full"
+                      initial={{ width: "0%" }}
+                      animate={{ width: "100%" }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
+                  </div>
+                  <p className="text-sm font-bold text-denim animate-pulse">{uploadStatus}</p>
+                </div>
+              ) : (
+                <div className="flex gap-4">
+                  <button onClick={() => setPreviewImage(null)} className="btn-secondary flex-1">Cancel</button>
+                  <button onClick={handleConfirmUpload} className="btn-primary flex-1">Save Changes</button>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

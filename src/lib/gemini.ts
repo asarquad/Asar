@@ -7,99 +7,130 @@ if (!apiKey) {
 const ai = new GoogleGenAI({ apiKey });
 
 export async function generateQuizFromBook(bookTitle: string, content: string | { data: string, mimeType: string }) {
-  const model = "gemini-1.5-flash-latest";
+  const model = "gemini-3-flash-preview";
+  console.log("Gemini: Generating quiz for", bookTitle, "using model", model);
   
-  const prompt = `Generate 100-120 multiple-choice questions based on the following book content from "${bookTitle}". 
-  It is CRITICAL that you provide at least 100 unique and challenging questions.
-  The response must be a JSON array of objects, where each object has:
-  - question: string
-  - options: array of 4 strings
-  - correctIndex: number (0-3)
-  - chapter: string (the book title or specific chapter if identified)
-  
-  Make sure the questions are challenging but fair for students.`;
+  const systemInstruction = `You are an elite curriculum developer. Your sole purpose is to generate high-volume, high-quality question banks. 
+  You MUST always generate exactly 100 questions as requested. 
+  Never truncate the list. Never summarize. 
+  Each question must be unique and derived from the provided content.
+  If the content is short, expand on the concepts to reach the 100-question goal.`;
 
-  const response = await ai.models.generateContent({
-    model,
-    contents: typeof content === 'string' 
-      ? [{ parts: [{ text: prompt }, { text: content }] }]
-      : { parts: [{ text: prompt }, { inlineData: content }] },
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.ARRAY,
-        items: {
-          type: Type.OBJECT,
-          properties: {
-            question: { type: Type.STRING },
-            options: { 
-              type: Type.ARRAY,
-              items: { type: Type.STRING }
-            },
-            correctIndex: { type: Type.NUMBER },
-            chapter: { type: Type.STRING }
-          },
-          required: ["question", "options", "correctIndex", "chapter"]
-        }
-      }
-    }
-  });
+  const prompt = `TASK: Generate a comprehensive quiz based on the provided content from the book "${bookTitle}".
+  
+  REQUIREMENTS:
+  1. QUANTITY: You MUST generate EXACTLY 100 unique multiple-choice questions. This is a non-negotiable hard requirement.
+  2. QUALITY: Questions should range from basic recall to advanced critical thinking.
+  3. STRUCTURE: Each question must have exactly 4 options.
+  4. FORMAT: Return the data as a JSON array of objects.
+  
+  JSON SCHEMA:
+  - question: string (The question text)
+  - options: string[] (Array of exactly 4 strings)
+  - correctIndex: number (0-3, index of the correct answer)
+  - chapter: string (The specific chapter name if found, otherwise use "${bookTitle}")
+  - difficulty: string ("Easy", "Medium", or "Hard" based on the question complexity)
+  
+  Ensure the questions are accurate to the source material and pedagogically sound.`;
 
   try {
-    return JSON.parse(response.text || "[]");
+    const response = await ai.models.generateContent({
+      model,
+      contents: typeof content === 'string' 
+        ? [{ parts: [{ text: prompt }, { text: content }] }]
+        : { parts: [{ text: prompt }, { inlineData: content }] },
+      config: {
+        systemInstruction,
+        responseMimeType: "application/json",
+        maxOutputTokens: 20000, // Substantially increased for 100 questions + thinking tokens
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              question: { type: Type.STRING },
+              options: { 
+                type: Type.ARRAY,
+                items: { type: Type.STRING }
+              },
+              correctIndex: { type: Type.NUMBER },
+              chapter: { type: Type.STRING },
+              difficulty: { type: Type.STRING, enum: ["Easy", "Medium", "Hard"] }
+            },
+            required: ["question", "options", "correctIndex", "chapter", "difficulty"]
+          }
+        }
+      }
+    });
+
+    const text = response.text;
+    console.log("Gemini: Received response length", text?.length);
+    const parsed = JSON.parse(text || "[]");
+    console.log(`Gemini: Parsed ${parsed.length} questions.`);
+    return parsed;
   } catch (e) {
-    console.error("Failed to parse Gemini response", e);
-    return [];
+    console.error("Gemini: generateQuizFromBook failed", e);
+    throw e;
   }
 }
 
 export async function extractStudentsFromIDCards(content: { data: string, mimeType: string }) {
-  const model = "gemini-1.5-flash-latest";
+  const model = "gemini-3-flash-preview";
+  console.log("Gemini: Extracting students using model", model);
   
-  const prompt = `You are an expert data extractor. I am providing a PDF or image containing multiple student ID cards. 
-  Extract the information for EVERY student shown in the document.
-  The response must be a JSON array of objects, where each object has:
-  - studentId: string (e.g., "S12345")
-  - name: string (Full name of the student)
-  - phone: string (Phone number if available, otherwise empty string)
-  - roll: string (Roll number if available, otherwise empty string)
-  - grade: string (Grade or Class if available, otherwise empty string)
+  const prompt = `You are a highly accurate data extraction specialist. 
+  TASK: Extract student information from the provided document (ID cards, lists, or registration forms).
   
-  If a field is missing for a student, use an empty string. 
-  Ensure all students in the document are captured.`;
-
-  const response = await ai.models.generateContent({
-    model,
-    contents: { parts: [{ text: prompt }, { inlineData: content }] },
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.ARRAY,
-        items: {
-          type: Type.OBJECT,
-          properties: {
-            studentId: { type: Type.STRING },
-            name: { type: Type.STRING },
-            phone: { type: Type.STRING },
-            roll: { type: Type.STRING },
-            grade: { type: Type.STRING }
-          },
-          required: ["studentId", "name", "phone", "roll", "grade"]
-        }
-      }
-    }
-  });
+  INSTRUCTIONS:
+  1. Scan the entire document for student details.
+  2. Extract: Full Name, Student ID, Phone Number, Roll Number, and Grade/Class.
+  3. If a field is not found, use an empty string "".
+  4. Ensure every student visible in the document is captured.
+  
+  JSON SCHEMA:
+  - studentId: string (Unique identifier)
+  - name: string (Full name)
+  - phone: string (Contact number)
+  - roll: string (Roll number)
+  - grade: string (Grade or Class)
+  
+  Return the result as a JSON array of student objects.`;
 
   try {
-    return JSON.parse(response.text || "[]");
+    const response = await ai.models.generateContent({
+      model,
+      contents: { parts: [{ text: prompt }, { inlineData: content }] },
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              studentId: { type: Type.STRING },
+              name: { type: Type.STRING },
+              phone: { type: Type.STRING },
+              roll: { type: Type.STRING },
+              grade: { type: Type.STRING }
+            },
+            required: ["studentId", "name", "phone", "roll", "grade"]
+          }
+        }
+      }
+    });
+
+    const text = response.text;
+    console.log("Gemini: Received students response length", text?.length);
+    return JSON.parse(text || "[]");
   } catch (e) {
-    console.error("Failed to parse Gemini response", e);
-    return [];
+    console.error("Gemini: extractStudentsFromIDCards failed", e);
+    throw e;
   }
 }
 
 export async function extractEventsFromCalendar(content: { data: string, mimeType: string }) {
-  const model = "gemini-1.5-flash-latest";
+  const model = "gemini-3-flash-preview";
+  console.log("Gemini: Extracting events using model", model);
   
   const prompt = `You are an expert at extracting school calendar events from images. 
   I am providing an image of a monthly school calendar. 
@@ -155,10 +186,10 @@ export async function extractEventsFromCalendar(content: { data: string, mimeTyp
     });
 
     const text = response.text || "[]";
-    console.log("Gemini Raw Response:", text);
+    console.log("Gemini: Received events response length", text.length);
     return JSON.parse(text);
   } catch (e) {
-    console.error("Gemini Calendar Extraction Error:", e);
+    console.error("Gemini: extractEventsFromCalendar failed", e);
     throw e;
   }
 }

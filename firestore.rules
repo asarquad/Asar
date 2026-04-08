@@ -91,7 +91,8 @@ service cloud.firestore {
              data.question is string &&
              data.options is list && data.options.size() >= 2 &&
              data.correctIndex is number &&
-             (!('subject' in data) || data.subject is string);
+             (!('subject' in data) || data.subject is string) &&
+             (!('level' in data) || data.level is number);
     }
 
     function isValidEvent(data) {
@@ -100,7 +101,18 @@ service cloud.firestore {
              data.date is timestamp &&
              data.time is string &&
              data.description is string && data.description.size() < 1000 &&
-             (!('createdAt' in data) || data.createdAt is timestamp);
+             (!('createdAt' in data) || data.createdAt is timestamp) &&
+             (!('endDate' in data) || data.endDate == null || data.endDate is timestamp);
+    }
+
+    function isValidAdminStudent(data) {
+      return data.keys().hasAll(['studentId', 'name']) &&
+             data.studentId is string &&
+             data.name is string &&
+             (!('phone' in data) || data.phone is string) &&
+             (!('roll' in data) || data.roll is string) &&
+             (!('grade' in data) || data.grade is string) &&
+             (!('createdAt' in data) || data.createdAt is string);
     }
 
     // ===============================================================
@@ -148,7 +160,7 @@ service cloud.firestore {
       // Allow individual lookups for registration/login verification
       allow get: if true;
       // Only admins can list all students or modify the database
-      allow list, create, update, delete: if isAdmin();
+      allow list, create, update, delete: if isAdmin() && (request.method == 'list' || request.method == 'get' || request.method == 'delete' || isValidAdminStudent(request.resource.data));
     }
 
     match /events/{eventId} {
