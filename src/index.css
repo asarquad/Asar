@@ -23,8 +23,8 @@
   scrollbar-width: none;
 }
 
-.mobile-container {
-  @apply max-w-md mx-auto min-h-screen bg-ivory shadow-xl relative flex flex-col;
+.app-container {
+  @apply w-full max-w-7xl mx-auto min-h-screen bg-ivory shadow-xl relative flex flex-col md:rounded-[2.5rem] md:my-8 md:min-h-[calc(100vh-4rem)];
 }
 
 .btn-primary {

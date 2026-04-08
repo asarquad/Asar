@@ -3,9 +3,10 @@ import { GoogleGenAI, Type } from "@google/genai";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 export async function generateQuizFromBook(bookTitle: string, content: string | { data: string, mimeType: string }) {
-  const model = "gemini-3-flash-preview";
+  const model = "gemini-1.5-flash";
   
-  const prompt = `Generate 10 multiple-choice questions based on the following book content from "${bookTitle}". 
+  const prompt = `Generate 100-120 multiple-choice questions based on the following book content from "${bookTitle}". 
+  It is CRITICAL that you provide at least 100 unique and challenging questions.
   The response must be a JSON array of objects, where each object has:
   - question: string
   - options: array of 4 strings
@@ -49,7 +50,7 @@ export async function generateQuizFromBook(bookTitle: string, content: string | 
 }
 
 export async function extractStudentsFromIDCards(content: { data: string, mimeType: string }) {
-  const model = "gemini-3-flash-preview";
+  const model = "gemini-1.5-flash";
   
   const prompt = `You are an expert data extractor. I am providing a PDF or image containing multiple student ID cards. 
   Extract the information for EVERY student shown in the document.
@@ -94,7 +95,7 @@ export async function extractStudentsFromIDCards(content: { data: string, mimeTy
 }
 
 export async function extractEventsFromCalendar(content: { data: string, mimeType: string }) {
-  const model = "gemini-3-flash-preview";
+  const model = "gemini-1.5-flash";
   
   const prompt = `You are an expert at extracting school calendar events from images. 
   I am providing an image of a monthly school calendar. 

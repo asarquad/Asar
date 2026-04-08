@@ -453,15 +453,17 @@ export default function AdminPanel() {
         const generatedQuestions = await generateQuizFromBook(bookTitle, { data, mimeType });
         
         if (generatedQuestions && generatedQuestions.length > 0) {
-          const batch = generatedQuestions.map((q: any) => 
-            addDoc(collection(db, 'questions'), {
+          const batch = writeBatch(db);
+          generatedQuestions.forEach((q: any) => {
+            const newDocRef = doc(collection(db, 'questions'));
+            batch.set(newDocRef, {
               ...q,
               subject: bookSubject,
               chapter: bookTitle,
               level: bookLevel
-            })
-          );
-          await Promise.all(batch);
+            });
+          });
+          await batch.commit();
           showNotification(`Successfully generated ${generatedQuestions.length} questions for "${bookSubject} - ${bookTitle}"!`);
           setBookFile(null);
           setBookTitle('');
@@ -572,45 +574,7 @@ export default function AdminPanel() {
         )}
       </AnimatePresence>
 
-      {/* Quick Actions for the user request */}
-      <div className="w-full bg-red-50 border border-red-100 rounded-3xl p-6 mb-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center">
-            <AlertCircle size={24} />
-          </div>
-          <div className="text-left">
-            <h4 className="font-black text-red-900 uppercase tracking-tight">Quick Cleanup</h4>
-            <p className="text-red-600 text-xs">Reset all user points and cleanup sections.</p>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3 w-full sm:w-auto">
-          <button
-            onClick={() => setConfirmDelete({ id: 'all', type: 'reset_points' })}
-            className="flex-1 sm:px-6 py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition-all shadow-lg shadow-orange-200"
-          >
-            Reset All Points
-          </button>
-          <button
-            onClick={() => setConfirmDelete({ id: 'Chemistry', type: 'category', subType: 'subject' })}
-            className="flex-1 sm:px-6 py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all shadow-lg shadow-red-200"
-          >
-            Delete Chemistry
-          </button>
-          <button
-            onClick={() => setConfirmDelete({ id: 'Biology', type: 'category', subType: 'subject' })}
-            className="flex-1 sm:px-6 py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all shadow-lg shadow-red-200"
-          >
-            Delete Biology
-          </button>
-          <button
-            onClick={() => setConfirmDelete({ id: 'Uncategorized', type: 'category', subType: 'subject' })}
-            className="flex-1 sm:px-6 py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all shadow-lg shadow-red-200"
-          >
-            Delete Uncategorized
-          </button>
-        </div>
-      </div>
-
+      {/* Tabs */}
       <div className="flex gap-2">
         <button
           onClick={() => setActiveTab('users')}

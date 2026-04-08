@@ -21,6 +21,15 @@ export default function Home() {
       if (snapshot.exists()) {
         setUserData(snapshot.data());
       }
+    }, (err: any) => {
+      console.error("Home Snapshot Error:", err);
+      if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+        if (!window.location.search.includes('error=quota')) {
+          const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+          window.history.replaceState({}, '', newUrl);
+          window.location.reload();
+        }
+      }
     });
 
     // Calculate rank (simplified: fetch top 100 and find index)
@@ -29,6 +38,16 @@ export default function Home() {
       const index = snapshot.docs.findIndex(doc => doc.id === auth.currentUser?.uid);
       if (index !== -1) {
         setRank(index + 1);
+      }
+      setLoading(false);
+    }).catch(err => {
+      console.error("Home Rank Fetch Error:", err);
+      if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+        if (!window.location.search.includes('error=quota')) {
+          const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+          window.history.replaceState({}, '', newUrl);
+          window.location.reload();
+        }
       }
       setLoading(false);
     });

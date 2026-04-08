@@ -99,6 +99,15 @@ export default function Calendar() {
         } as Event;
       });
       setEvents(eventsData);
+    }, (err: any) => {
+      console.error("Calendar Snapshot Error:", err);
+      if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+        if (!window.location.search.includes('error=quota')) {
+          const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+          window.history.replaceState({}, '', newUrl);
+          window.location.reload();
+        }
+      }
     });
 
     return () => unsubscribe();

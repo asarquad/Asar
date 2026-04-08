@@ -105,11 +105,12 @@ export default function App() {
                   }, { merge: true });
                 }
               } catch (err: any) {
-                if (err.code === 'resource-exhausted') {
+                if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
                   console.warn("Firestore Quota Exceeded: Heartbeat skipped.");
                   if (!window.location.search.includes('error=quota')) {
                     const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
                     window.history.replaceState({}, '', newUrl);
+                    window.location.reload();
                   }
                 } else {
                   console.warn("Heartbeat failed:", err);
@@ -149,11 +150,27 @@ export default function App() {
                 }
               }
             }
+          }, (err: any) => {
+            if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+              console.error("Snapshot Quota Exceeded:", err);
+              if (!window.location.search.includes('error=quota')) {
+                const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+                window.history.replaceState({}, '', newUrl);
+                window.location.reload();
+              }
+            }
           });
 
           setUser(currentUser);
-        } catch (err) {
+        } catch (err: any) {
           console.error("Error checking user status:", err);
+          if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+            if (!window.location.search.includes('error=quota')) {
+              const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+              window.history.replaceState({}, '', newUrl);
+              window.location.reload();
+            }
+          }
           setUser(currentUser);
         }
       } else {
@@ -174,7 +191,47 @@ export default function App() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-ivory">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-denim"></div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-denim"></div>
+          {isQuotaExceeded && (
+            <p className="text-denim font-black uppercase tracking-widest text-[10px] animate-pulse">
+              Quota Exceeded - Waiting for Reset
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (isQuotaExceeded) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-denim p-6 text-white text-center">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md flex flex-col items-center gap-6"
+        >
+          <div className="bg-white/10 p-6 rounded-full">
+            <AlertCircle size={64} className="text-orange-400" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-black uppercase tracking-tight mb-2">Daily Limit Reached</h1>
+            <p className="text-sm opacity-80 font-medium leading-relaxed">
+              The application has reached its free daily limit for database operations. 
+              This usually resets every 24 hours.
+            </p>
+          </div>
+          <div className="bg-white/5 p-4 rounded-2xl border border-white/10 w-full">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-1 opacity-60">Why am I seeing this?</p>
+            <p className="text-xs font-bold">We use a free tier to keep this app running. High traffic can sometimes exhaust the daily quota.</p>
+          </div>
+          <button 
+            onClick={() => window.location.reload()}
+            className="bg-white text-denim px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-ivory transition-all shadow-xl"
+          >
+            Try Refreshing
+          </button>
+        </motion.div>
       </div>
     );
   }
@@ -182,7 +239,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <Router>
-        <div className="mobile-container relative">
+        <div className="app-container relative">
           {/* Quota Warning Overlay */}
           <AnimatePresence>
             {isQuotaExceeded && (

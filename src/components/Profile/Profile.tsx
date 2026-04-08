@@ -57,8 +57,15 @@ export default function Profile() {
         });
       }
       setLoading(false);
-    }, (err) => {
+    }, (err: any) => {
       console.error("Profile: Failed to fetch user data:", err);
+      if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+        if (!window.location.search.includes('error=quota')) {
+          const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+          window.history.replaceState({}, '', newUrl);
+          window.location.reload();
+        }
+      }
       setLoading(false);
     });
 
@@ -71,6 +78,15 @@ export default function Profile() {
     const historyUnsubscribe = onSnapshot(historyQuery, (snapshot) => {
       const attempts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setQuizAttempts(attempts);
+    }, (err: any) => {
+      console.error("Profile History Error:", err);
+      if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+        if (!window.location.search.includes('error=quota')) {
+          const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+          window.history.replaceState({}, '', newUrl);
+          window.location.reload();
+        }
+      }
     });
 
     return () => {

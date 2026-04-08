@@ -76,11 +76,11 @@ export default function Layout({ user }: LayoutProps) {
         </Link>
       </header>
 
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-24">
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-0 w-full max-w-md bg-white border-t border-gray-100 px-6 py-3 flex justify-between items-center shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-xl bg-white/80 backdrop-blur-lg border-t border-gray-100 px-8 py-4 flex justify-between items-center shadow-[0_-8px_30px_rgba(0,0,0,0.04)] md:bottom-8 md:rounded-[2rem] md:border md:shadow-2xl z-50">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;

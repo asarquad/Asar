@@ -103,8 +103,15 @@ export default function QuizGame() {
         
         setSubjects(uniqueSubjects);
         setLoading(false);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error fetching quizzes:", err);
+        if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+          if (!window.location.search.includes('error=quota')) {
+            const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+            window.history.replaceState({}, '', newUrl);
+            window.location.reload();
+          }
+        }
         setLoading(false);
       }
     };

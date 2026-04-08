@@ -34,6 +34,15 @@ export default function Leaderboard() {
       const usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setUsers(usersData);
       setLoading(false);
+    }, (err: any) => {
+      console.error("Leaderboard Snapshot Error:", err);
+      if (err.code === 'resource-exhausted' || err.message?.includes('Quota exceeded')) {
+        if (!window.location.search.includes('error=quota')) {
+          const newUrl = window.location.pathname + '?error=quota' + window.location.hash;
+          window.history.replaceState({}, '', newUrl);
+          window.location.reload();
+        }
+      }
     });
     return () => unsubscribe();
   }, []);
