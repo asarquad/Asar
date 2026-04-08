@@ -552,7 +552,7 @@ export default function AdminPanel() {
         <Shield className="text-red-400" size={64} />
         <h2 className="text-2xl font-bold text-gray-800">Access Denied</h2>
         <p className="text-gray-500">You do not have administrative privileges.</p>
-        <button onClick={() => navigate('/')} className="btn-primary">Back to Home</button>
+        <button onClick={() => navigate('/')} className="btn-primary px-10">Back to Home</button>
       </div>
     );
   }
@@ -620,11 +620,11 @@ export default function AdminPanel() {
               </div>
 
               <div className="flex gap-4 pt-4 border-t border-gray-100">
-                <button onClick={() => setReviewQuestions(null)} className="btn-secondary flex-1" disabled={loading}>Discard</button>
+                <button onClick={() => setReviewQuestions(null)} className="btn-secondary flex-1 py-4" disabled={loading}>Discard</button>
                 <button 
                   onClick={confirmImportQuiz} 
                   disabled={loading}
-                  className="btn-primary flex-1 flex items-center justify-center gap-2"
+                  className="btn-primary flex-1 py-4"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -750,45 +750,45 @@ export default function AdminPanel() {
       </AnimatePresence>
 
       {/* Tabs */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 bg-white/40 backdrop-blur-xl p-1.5 rounded-[2.5rem] border border-white/60 shadow-lg">
         <button
           onClick={() => setActiveTab('users')}
-          className={cn("flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2", 
-            activeTab === 'users' ? "bg-denim text-white" : "bg-white text-gray-400 border border-gray-100")}
+          className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
+            activeTab === 'users' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
         >
-          <Users size={18} />
+          <Users size={16} />
           Users
         </button>
         <button
           onClick={() => setActiveTab('questions')}
-          className={cn("flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2", 
-            activeTab === 'questions' ? "bg-denim text-white" : "bg-white text-gray-400 border border-gray-100")}
+          className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
+            activeTab === 'questions' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
         >
-          <BookOpen size={18} />
+          <BookOpen size={16} />
           Quiz
         </button>
         <button
           onClick={() => setActiveTab('books')}
-          className={cn("flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2", 
-            activeTab === 'books' ? "bg-denim text-white" : "bg-white text-gray-400 border border-gray-100")}
+          className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
+            activeTab === 'books' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
         >
-          <FileText size={18} />
+          <FileText size={16} />
           Books
         </button>
         <button
           onClick={() => setActiveTab('database')}
-          className={cn("flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2", 
-            activeTab === 'database' ? "bg-denim text-white" : "bg-white text-gray-400 border border-gray-100")}
+          className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
+            activeTab === 'database' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
         >
-          <Plus size={18} />
+          <Plus size={16} />
           DB
         </button>
         <button
           onClick={() => setActiveTab('calendar')}
-          className={cn("flex-1 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2", 
-            activeTab === 'calendar' ? "bg-denim text-white" : "bg-white text-gray-400 border border-gray-100")}
+          className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
+            activeTab === 'calendar' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
         >
-          <CalendarIcon size={18} />
+          <CalendarIcon size={16} />
           Cal
         </button>
       </div>
@@ -813,8 +813,8 @@ export default function AdminPanel() {
                     <button
                       onClick={() => handleToggleAdmin(user.id, user.role || 'student')}
                       className={cn(
-                        "p-2 rounded-lg transition-all",
-                        user.role === 'admin' ? "bg-denim text-white" : "bg-denim/5 text-denim hover:bg-denim hover:text-white"
+                        "p-2 rounded-xl transition-all border border-transparent",
+                        user.role === 'admin' ? "bg-denim text-white shadow-lg" : "bg-denim/5 text-denim hover:bg-white hover:border-denim/20 hover:shadow-xl"
                       )}
                       title={user.role === 'admin' ? "Demote to Student" : "Promote to Admin"}
                     >
@@ -822,7 +822,7 @@ export default function AdminPanel() {
                     </button>
                     <button
                       onClick={() => handleAddAchievement(user.id)}
-                      className="p-2 bg-denim/10 text-denim rounded-lg hover:bg-denim hover:text-white transition-all"
+                      className="p-2 bg-denim/5 text-denim rounded-xl hover:bg-white hover:border-denim/20 hover:shadow-xl transition-all border border-transparent"
                       title="Add Achievement"
                     >
                       <Star size={18} />
@@ -830,8 +830,8 @@ export default function AdminPanel() {
                     <button
                       onClick={() => setConfirmDelete({ id: user.id, type: 'ban' })}
                       className={cn(
-                        "p-2 rounded-lg transition-all",
-                        user.isBanned ? "bg-orange-500 text-white" : "bg-orange-50 text-orange-500 hover:bg-orange-500 hover:text-white"
+                        "p-2 rounded-xl transition-all border border-transparent",
+                        user.isBanned ? "bg-orange-500 text-white shadow-lg" : "bg-orange-50 text-orange-500 hover:bg-white hover:border-orange-200 hover:shadow-xl"
                       )}
                       title={user.isBanned ? "Unban User" : "Ban User"}
                     >
@@ -839,7 +839,7 @@ export default function AdminPanel() {
                     </button>
                     <button
                       onClick={() => setConfirmDelete({ id: user.id, type: 'user' })}
-                      className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all"
+                      className="p-2 bg-red-50 text-red-500 rounded-xl hover:bg-white hover:border-red-200 hover:shadow-xl transition-all border border-transparent"
                       title="Delete User"
                     >
                       <Trash2 size={18} />
@@ -958,7 +958,7 @@ export default function AdminPanel() {
                       <option value="3">Option 4 is Correct</option>
                     </select>
                   </div>
-                  <button type="submit" className="btn-primary px-12 sm:self-end h-[50px] shadow-lg shadow-denim/20">
+                  <button type="submit" className="btn-primary px-12 sm:self-end h-[50px]">
                     Save Question
                   </button>
                 </div>
@@ -1162,10 +1162,8 @@ export default function AdminPanel() {
                   type="submit" 
                   disabled={aiLoading || !bookFile || !bookTitle || !bookSubject}
                   className={cn(
-                    "w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 shadow-xl",
-                    aiLoading 
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
-                      : "bg-denim text-white hover:bg-denim/90 shadow-denim/20 active:scale-[0.98]"
+                    "btn-primary w-full py-6 text-lg",
+                    aiLoading && "opacity-50 cursor-not-allowed"
                   )}
                 >
                   {aiLoading ? (

@@ -463,11 +463,11 @@ export default function Profile() {
         </div>
 
         <div className="flex gap-4">
-          <button onClick={() => setShowQR(true)} className="btn-secondary flex-1 flex items-center justify-center gap-2">
+          <button onClick={() => setShowQR(true)} className="btn-secondary flex-1 py-4 flex items-center justify-center gap-2">
             <QrCode size={20} />
             My QR
           </button>
-          <button onClick={() => setShowScanner(true)} className="btn-primary flex-1 flex items-center justify-center gap-2">
+          <button onClick={() => setShowScanner(true)} className="btn-primary flex-1 py-4 flex items-center justify-center gap-2">
             <Scan size={20} />
             Scan QR
           </button>
@@ -476,7 +476,7 @@ export default function Profile() {
         {isOwnProfile && (
           <button 
             onClick={handleSignOut}
-            className="w-full py-4 rounded-2xl font-bold bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-2xl font-black uppercase tracking-widest text-xs bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2 border border-red-100 shadow-lg shadow-red-500/5"
           >
             <LogOut size={20} />
             Sign Out

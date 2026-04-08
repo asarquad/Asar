@@ -592,7 +592,7 @@ export default function QuizGame() {
           <div className="flex flex-col gap-3 w-full">
             <button 
               onClick={() => startQuiz()} 
-              className="btn-primary w-full bg-wine hover:bg-wine/90 flex items-center justify-center gap-2"
+              className="btn-primary w-full bg-wine/10 text-wine border-wine/20 hover:bg-wine/20"
             >
               Play Again
               <ChevronRight size={20} />

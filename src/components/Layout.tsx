@@ -80,7 +80,7 @@ export default function Layout({ user }: LayoutProps) {
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-xl bg-white/80 backdrop-blur-lg border-t border-gray-100 px-8 py-4 flex justify-between items-center shadow-[0_-8px_30px_rgba(0,0,0,0.04)] md:bottom-8 md:rounded-[2rem] md:border md:shadow-2xl z-50">
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-xl bg-white/40 backdrop-blur-2xl border border-white/60 px-8 py-4 flex justify-between items-center shadow-2xl shadow-denim/10 md:bottom-8 md:rounded-[2.5rem] z-50">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -89,12 +89,12 @@ export default function Layout({ user }: LayoutProps) {
               key={item.path}
               to={item.path}
               className={cn(
-                "flex flex-col items-center gap-1 transition-all",
-                isActive ? "text-denim scale-110" : "text-gray-400 hover:text-gray-600"
+                "flex flex-col items-center gap-1 transition-all relative p-2 rounded-2xl",
+                isActive ? "text-denim scale-110 bg-white/60 shadow-lg shadow-denim/5 border border-white/80" : "text-gray-400 hover:text-gray-600"
               )}
             >
-              <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-              <span className="text-[10px] font-medium uppercase tracking-wider">{item.label}</span>
+              <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[9px] font-black uppercase tracking-widest">{item.label}</span>
             </Link>
           );
         })}

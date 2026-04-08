@@ -324,25 +324,25 @@ export default function Login() {
           </div>
 
           {/* Login Method Toggle */}
-          <div className="flex p-1 bg-gray-50 rounded-2xl border border-gray-100">
+          <div className="flex p-1.5 bg-white/40 backdrop-blur-xl rounded-[2rem] border border-white/60 shadow-lg">
             <button
               onClick={() => setLoginMethod('google')}
               className={cn(
-                "flex-1 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2",
-                loginMethod === 'google' ? "bg-white text-denim shadow-sm" : "text-gray-400"
+                "flex-1 py-3 rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2",
+                loginMethod === 'google' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400"
               )}
             >
-              <Chrome size={18} />
+              <Chrome size={16} />
               Google
             </button>
             <button
               onClick={() => setLoginMethod('id')}
               className={cn(
-                "flex-1 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2",
-                loginMethod === 'id' ? "bg-white text-denim shadow-sm" : "text-gray-400"
+                "flex-1 py-3 rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2",
+                loginMethod === 'id' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400"
               )}
             >
-              <GraduationCap size={18} />
+              <GraduationCap size={16} />
               School ID
             </button>
           </div>
@@ -358,7 +358,7 @@ export default function Login() {
             <button
               onClick={handleGoogleLogin}
               disabled={loading}
-              className="w-full bg-white border-2 border-gray-100 text-gray-700 px-6 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-50 hover:border-denim/30 transition-all active:scale-95 disabled:opacity-50"
+              className="btn-primary w-full py-5 bg-white/60 border-white/80"
             >
               {loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-denim"></div>

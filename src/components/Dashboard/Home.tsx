@@ -125,9 +125,9 @@ export default function Home() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate('/quiz')}
-          className="card p-6 bg-wine text-white border-none flex flex-col items-center gap-4 group shadow-xl shadow-wine/20"
+          className="card p-6 bg-wine/10 text-wine border-wine/20 flex flex-col items-center gap-4 group shadow-xl shadow-wine/5"
         >
-          <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <div className="w-12 h-12 bg-wine/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
             <Zap size={28} className="fill-current" />
           </div>
           <div className="text-center">
