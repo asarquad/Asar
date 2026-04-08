@@ -284,7 +284,7 @@ export default function AdminPanel() {
       });
 
       if (students.length === 0) {
-        showNotification('No students found in the document.', 'error');
+        showNotification('No students found in the document. This could be due to a "Permission Denied" error or an invalid API key. Please check your Gemini API key in settings.', 'error');
         return;
       }
 
@@ -335,7 +335,7 @@ export default function AdminPanel() {
       });
 
       if (!extractedEvents || extractedEvents.length === 0) {
-        showNotification('No school events found in the document.', 'error');
+        showNotification('No school events found in the document. This could be due to a "Permission Denied" error or an invalid API key. Please check your Gemini API key in settings.', 'error');
         return;
       }
 
@@ -453,6 +453,7 @@ export default function AdminPanel() {
         const generatedQuestions = await generateQuizFromBook(bookTitle, { data, mimeType });
         
         if (generatedQuestions && generatedQuestions.length > 0) {
+          // ... existing batch logic ...
           const batch = writeBatch(db);
           generatedQuestions.forEach((q: any) => {
             const newDocRef = doc(collection(db, 'questions'));
@@ -470,7 +471,7 @@ export default function AdminPanel() {
           setBookSubject('');
           fetchData();
         } else {
-          showNotification("AI failed to generate questions. Please try a clearer image or text.", 'error');
+          showNotification("AI failed to generate questions. This could be due to a 'Permission Denied' error or an invalid API key. Please check your Gemini API key in settings.", 'error');
         }
       };
       reader.readAsDataURL(bookFile);

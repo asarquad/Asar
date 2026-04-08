@@ -300,7 +300,7 @@ export default function Calendar() {
         variants={gridContainerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-2 gap-4"
+        className="grid grid-cols-2 lg:grid-cols-4 gap-4"
       >
         {months.map((month, idx) => {
           const monthStart = startOfMonth(month);
