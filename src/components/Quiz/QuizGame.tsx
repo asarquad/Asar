@@ -321,10 +321,10 @@ export default function QuizGame() {
           </motion.div>
           <div className="space-y-1">
             <h2 className="text-4xl font-black text-wine tracking-tighter uppercase italic">
-              {selectedSubject ? selectedSubject : "Select Subject"}
+              {selectedSubject ? selectedSubject : "Select Book"}
             </h2>
             <p className="text-gray-500 font-bold text-sm tracking-widest uppercase opacity-60">
-              {selectedSubject ? "Choose a chapter to begin your quest" : "Pick a discipline to master"}
+              {selectedSubject ? "Choose a chapter to begin your quest" : "Pick a book to master"}
             </p>
           </div>
         </div>
@@ -335,8 +335,8 @@ export default function QuizGame() {
               <AlertCircle className="text-gray-300" size={48} />
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-black text-gray-800">The Arena is Empty</h2>
-              <p className="text-gray-500 max-w-xs mx-auto font-medium">The grandmasters haven't prepared any challenges yet. Check back soon!</p>
+              <h2 className="text-2xl font-black text-gray-800">The Library is Empty</h2>
+              <p className="text-gray-500 max-w-xs mx-auto font-medium">The grandmasters haven't prepared any books yet. Check back soon!</p>
             </div>
           </div>
         ) : (
@@ -373,7 +373,7 @@ export default function QuizGame() {
                     onClick={() => setSelectedSubject(null)}
                     className="text-wine font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-wine/5 px-4 py-2 rounded-full transition-all"
                   >
-                    ← Back to Subjects
+                    ← Back to Books
                   </button>
                   <div className="h-px flex-1 bg-wine/10 mx-4"></div>
                 </div>

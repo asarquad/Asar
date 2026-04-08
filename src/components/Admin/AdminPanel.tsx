@@ -757,7 +757,7 @@ export default function AdminPanel() {
             activeTab === 'users' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
         >
           <Users size={16} />
-          Users
+          Students
         </button>
         <button
           onClick={() => setActiveTab('questions')}
@@ -765,15 +765,15 @@ export default function AdminPanel() {
             activeTab === 'questions' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
         >
           <BookOpen size={16} />
-          Quiz
+          Books
         </button>
         <button
           onClick={() => setActiveTab('books')}
           className={cn("flex-1 py-3 rounded-[2rem] font-black uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2", 
             activeTab === 'books' ? "bg-white text-denim shadow-xl shadow-denim/10 border border-white" : "text-gray-400 hover:text-gray-600")}
         >
-          <FileText size={16} />
-          Books
+          <Sparkles size={16} />
+          AI Gen
         </button>
         <button
           onClick={() => setActiveTab('database')}
@@ -925,11 +925,11 @@ export default function AdminPanel() {
               <form onSubmit={handleAddQuestion} className="p-6 space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Subject</label>
-                    <input name="subject" required className="input-field bg-gray-50/50" placeholder="e.g. Biology" />
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Book Name</label>
+                    <input name="subject" required list="existing-books" className="input-field bg-gray-50/50" placeholder="e.g. Biology" />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Chapter / Section</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Chapter Name</label>
                     <input name="chapter" required className="input-field bg-gray-50/50" placeholder="e.g. Cell Structure" />
                   </div>
                 </div>
@@ -989,12 +989,12 @@ export default function AdminPanel() {
                         <div className="w-10 h-10 bg-denim/10 rounded-xl flex items-center justify-center text-denim">
                           <FolderInput size={20} />
                         </div>
-                        <h4 className="text-lg font-black text-denim uppercase tracking-tight">{subject}</h4>
+                        <h4 className="text-lg font-black text-denim uppercase tracking-tight">Book: {subject}</h4>
                       </div>
                       <button
                         onClick={() => setConfirmDelete({ id: subject, type: 'category', subType: 'subject' })}
                         className="p-2 text-gray-300 hover:text-red-500 transition-colors"
-                        title={`Delete ${subject}`}
+                        title={`Delete Book ${subject}`}
                       >
                         <Trash2 size={20} />
                       </button>
@@ -1023,9 +1023,9 @@ export default function AdminPanel() {
                             >
                               <div className="flex-1 w-full">
                                 <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
-                                  <span>{q.subject}</span>
+                                  <span className="text-denim">Book: {q.subject}</span>
                                   <span>•</span>
-                                  <span>{q.chapter}</span>
+                                  <span>Chapter: {q.chapter}</span>
                                 </div>
                                 <p className="font-bold text-gray-800 leading-snug">{q.question}</p>
                                 <div className="grid grid-cols-2 gap-2 mt-3">
@@ -1044,7 +1044,7 @@ export default function AdminPanel() {
                                 <button
                                   onClick={() => {
                                     const currentPath = q.subject ? `${q.subject}/${q.chapter}` : q.chapter;
-                                    const newPath = prompt('Enter new path (Subject/Chapter):', currentPath);
+                                    const newPath = prompt('Enter new path (Book/Chapter):', currentPath);
                                     if (newPath && newPath !== currentPath) handleUpdateQuestionCategory(q.id, newPath);
                                   }}
                                   className="flex-1 sm:p-2 p-3 bg-denim/5 text-denim rounded-xl hover:bg-denim hover:text-white transition-all flex items-center justify-center"
@@ -1102,18 +1102,26 @@ export default function AdminPanel() {
               <form onSubmit={handleGenerateAIQuiz} className="p-8 space-y-6 bg-white">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Subject</label>
-                    <input 
-                      type="text" 
-                      required 
-                      className="input-field bg-gray-50 text-lg font-bold py-4" 
-                      placeholder="e.g. Biology" 
-                      value={bookSubject}
-                      onChange={(e) => setBookSubject(e.target.value)}
-                    />
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Book Name</label>
+                    <div className="relative">
+                      <input 
+                        type="text" 
+                        required 
+                        list="existing-books"
+                        className="input-field bg-gray-50 text-lg font-bold py-4" 
+                        placeholder="e.g. Biology" 
+                        value={bookSubject}
+                        onChange={(e) => setBookSubject(e.target.value)}
+                      />
+                      <datalist id="existing-books">
+                        {Array.from(new Set(questions.map(q => q.subject || 'Uncategorized'))).sort().map(book => (
+                          <option key={book} value={book} />
+                        ))}
+                      </datalist>
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Chapter / Quiz Title</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Chapter Title</label>
                     <input 
                       type="text" 
                       required 
