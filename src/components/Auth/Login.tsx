@@ -395,7 +395,7 @@ export default function Login() {
                 <input
                   type="text"
                   required
-                  className="input-field border-forest/20 text-forest mt-1"
+                  className="input-field mt-1"
                   placeholder="e.g. S12345"
                   value={idInfo.studentId}
                   onChange={(e) => setIdInfo({ ...idInfo, studentId: e.target.value })}
@@ -406,7 +406,7 @@ export default function Login() {
                 <input
                   type="tel"
                   required
-                  className="input-field border-forest/20 text-forest mt-1"
+                  className="input-field mt-1"
                   placeholder="Your registered phone"
                   value={idInfo.phone}
                   onChange={(e) => setIdInfo({ ...idInfo, phone: e.target.value })}

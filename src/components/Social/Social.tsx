@@ -464,7 +464,7 @@ export default function Calendar() {
                     required
                     type="text" 
                     placeholder="e.g. Math Quiz" 
-                    className="input-field"
+                    className="input-field bg-butter/5 border-butter/20 text-butter placeholder:text-butter/40 focus:border-butter focus:ring-butter/20"
                     value={newEvent.title}
                     onChange={e => setNewEvent({...newEvent, title: e.target.value})}
                   />
@@ -476,7 +476,7 @@ export default function Calendar() {
                     <input 
                       required
                       type="date" 
-                      className="input-field"
+                      className="input-field bg-butter/5 border-butter/20 text-butter placeholder:text-butter/40 focus:border-butter focus:ring-butter/20"
                       value={newEvent.date}
                       onChange={e => setNewEvent({...newEvent, date: e.target.value})}
                     />
@@ -485,7 +485,7 @@ export default function Calendar() {
                     <label className="text-[10px] font-bold uppercase tracking-widest text-butter/40 ml-2">End Date (Optional)</label>
                     <input 
                       type="date" 
-                      className="input-field"
+                      className="input-field bg-butter/5 border-butter/20 text-butter placeholder:text-butter/40 focus:border-butter focus:ring-butter/20"
                       value={newEvent.endDate}
                       onChange={e => setNewEvent({...newEvent, endDate: e.target.value})}
                     />
@@ -496,7 +496,7 @@ export default function Calendar() {
                   <label className="text-[10px] font-bold uppercase tracking-widest text-butter/40 ml-2">Description (Optional)</label>
                   <textarea 
                     placeholder="Details about the event..." 
-                    className="input-field min-h-[100px] py-4"
+                    className="input-field bg-butter/5 border-butter/20 text-butter placeholder:text-butter/40 focus:border-butter focus:ring-butter/20 min-h-[100px] py-4"
                     value={newEvent.description}
                     onChange={e => setNewEvent({...newEvent, description: e.target.value})}
                   />

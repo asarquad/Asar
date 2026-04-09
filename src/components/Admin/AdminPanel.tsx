@@ -926,24 +926,24 @@ export default function AdminPanel() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Book Name</label>
-                    <input name="subject" required list="existing-books" className="input-field bg-gray-50/50" placeholder="e.g. Biology" />
+                    <input name="subject" required list="existing-books" className="input-field" placeholder="e.g. Biology" />
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Chapter Name</label>
-                    <input name="chapter" required className="input-field bg-gray-50/50" placeholder="e.g. Cell Structure" />
+                    <input name="chapter" required className="input-field" placeholder="e.g. Cell Structure" />
                   </div>
                 </div>
                 
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Question Content</label>
-                  <textarea name="question" required className="input-field h-24 bg-gray-50/50 resize-none" placeholder="Type your question here..." />
+                  <textarea name="question" required className="input-field h-24 resize-none" placeholder="Type your question here..." />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[1, 2, 3, 4].map(i => (
                     <div key={i} className="space-y-1.5">
                       <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Option {i}</label>
-                      <input name={`opt${i}`} required className="input-field text-sm bg-gray-50/50" placeholder={`Option ${i} text`} />
+                      <input name={`opt${i}`} required className="input-field text-sm" placeholder={`Option ${i} text`} />
                     </div>
                   ))}
                 </div>
@@ -951,7 +951,7 @@ export default function AdminPanel() {
                 <div className="flex flex-col sm:flex-row gap-4 pt-2">
                   <div className="flex-1 space-y-1.5">
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Correct Answer</label>
-                    <select name="correctIndex" className="input-field bg-gray-50/50">
+                    <select name="correctIndex" className="input-field">
                       <option value="0">Option 1 is Correct</option>
                       <option value="1">Option 2 is Correct</option>
                       <option value="2">Option 3 is Correct</option>
@@ -1108,7 +1108,7 @@ export default function AdminPanel() {
                         type="text" 
                         required 
                         list="existing-books"
-                        className="input-field bg-gray-50 text-lg font-bold py-4" 
+                        className="input-field text-lg font-bold py-4" 
                         placeholder="e.g. Biology" 
                         value={bookSubject}
                         onChange={(e) => setBookSubject(e.target.value)}
@@ -1125,7 +1125,7 @@ export default function AdminPanel() {
                     <input 
                       type="text" 
                       required 
-                      className="input-field bg-gray-50 text-lg font-bold py-4" 
+                      className="input-field text-lg font-bold py-4" 
                       placeholder="e.g. Chapter 4" 
                       value={bookTitle}
                       onChange={(e) => setBookTitle(e.target.value)}

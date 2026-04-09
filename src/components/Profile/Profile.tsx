@@ -344,7 +344,7 @@ export default function Profile() {
               {isEditing ? (
                 <input
                   type="text"
-                  className="input-field py-1 px-2 text-sm mt-1 border-forest/20 text-forest"
+                  className="input-field py-1 px-2 text-sm mt-1"
                   value={editData.studentId}
                   onChange={(e) => setEditData({ ...editData, studentId: e.target.value })}
                 />
@@ -359,7 +359,7 @@ export default function Profile() {
               {isEditing ? (
                 <input
                   type="text"
-                  className="input-field py-1 px-2 text-sm mt-1 border-forest/20 text-forest"
+                  className="input-field py-1 px-2 text-sm mt-1"
                   value={editData.roll}
                   onChange={(e) => setEditData({ ...editData, roll: e.target.value })}
                 />
@@ -372,7 +372,7 @@ export default function Profile() {
               {isEditing ? (
                 <input
                   type="text"
-                  className="input-field py-1 px-2 text-sm mt-1 border-forest/20 text-forest"
+                  className="input-field py-1 px-2 text-sm mt-1"
                   value={editData.grade}
                   onChange={(e) => setEditData({ ...editData, grade: e.target.value })}
                 />
@@ -385,7 +385,7 @@ export default function Profile() {
               {isEditing ? (
                 <input
                   type="text"
-                  className="input-field py-1 px-2 text-sm mt-1 border-forest/20 text-forest"
+                  className="input-field py-1 px-2 text-sm mt-1"
                   value={editData.phone}
                   onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
                 />
@@ -401,7 +401,7 @@ export default function Profile() {
                 <div className="flex gap-2 mt-1">
                   <input
                     type="text"
-                    className="input-field py-1 px-2 text-sm flex-1 border-forest/20 text-forest"
+                    className="input-field py-1 px-2 text-sm flex-1"
                     value={editData.username}
                     onChange={(e) => setEditData({ ...editData, username: e.target.value })}
                   />
