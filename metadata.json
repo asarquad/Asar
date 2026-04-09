@@ -1,5 +1,5 @@
 {
-  "name": "School Quiz System",
+  "name": "Acadex",
   "description": "A mobile-first school quiz system with student ID verification, real-time leaderboard, and MCQ-based game.",
   "requestFramePermissions": ["camera"]
 }

@@ -56,8 +56,9 @@ export default function Layout({ user }: LayoutProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <header className="bg-butter px-6 py-4 border-b border-forest/10 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-forest">SchoolQuiz</h1>
+      <header className="bg-butter px-6 py-4 border-b border-forest/10 flex justify-between items-center relative">
+        <div className="w-10"></div> {/* Spacer */}
+        <h1 className="text-xl font-bold text-forest absolute left-1/2 -translate-x-1/2">Acadex</h1>
         <Link to={`/profile/${user?.uid}`} className="relative group">
           <div className="w-10 h-10 rounded-2xl bg-forest/5 border-2 border-forest/10 overflow-hidden transition-all group-hover:border-forest group-active:scale-95">
             {userData?.photoUrl ? (
