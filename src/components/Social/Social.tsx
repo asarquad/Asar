@@ -59,11 +59,11 @@ const MONTH_COLORS = [
 ];
 
 const DAILY_COLORS = [
-  'bg-forest text-white',
-  'bg-forest/80 text-white',
-  'bg-forest/60 text-white',
-  'bg-forest/40 text-butter',
-  'bg-forest/20 text-butter',
+  'bg-butter text-forest',
+  'bg-butter/90 text-forest',
+  'bg-butter/80 text-forest',
+  'bg-butter/70 text-forest',
+  'bg-butter/60 text-forest',
 ];
 
 export default function Calendar() {
@@ -202,7 +202,7 @@ export default function Calendar() {
                 colorClass
               )}
             >
-              <div className="flex flex-col items-center justify-center min-w-[60px] border-r border-white/20 pr-6">
+              <div className="flex flex-col items-center justify-center min-w-[60px] border-r border-forest/10 pr-6">
                 <span className="text-xs font-bold uppercase opacity-70">{format(event.date, 'EEE')}</span>
                 <span className="text-3xl font-black">{format(event.date, 'd')}</span>
                 <span className="text-xs font-bold uppercase opacity-70">{format(event.date, 'MMM')}</span>
@@ -211,7 +211,7 @@ export default function Calendar() {
               <div className="flex-1 flex flex-col justify-center space-y-2">
                 <div className="flex items-center gap-2">
                   {isMultiDay && (
-                    <span className="bg-white/20 px-2 py-0.5 rounded-full text-[10px] font-bold">
+                    <span className="bg-forest/10 px-2 py-0.5 rounded-full text-[10px] font-bold">
                       Until {format(event.endDate!, 'd MMM')}
                     </span>
                   )}
@@ -239,7 +239,7 @@ export default function Calendar() {
                         })()}
                       </span>
                     </div>
-                    <div className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full bg-forest/10 rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ 
@@ -256,7 +256,7 @@ export default function Calendar() {
                           })()}%` 
                         }}
                         transition={{ duration: 1, ease: "easeOut" }}
-                        className="h-full bg-gradient-to-r from-white/40 via-[#4DD0E1] to-[#00B4D8] shadow-[0_0_10px_rgba(0,180,216,0.4)]"
+                        className="h-full bg-forest shadow-[0_0_10px_rgba(0,54,49,0.4)]"
                       />
                     </div>
                   </div>
@@ -266,7 +266,7 @@ export default function Calendar() {
               {isAdmin && (
                 <button 
                   onClick={() => handleDeleteEvent(event.id)}
-                  className="absolute top-6 right-6 bg-white/10 hover:bg-red-500 text-white p-2 rounded-full transition-all backdrop-blur-sm"
+                  className="absolute top-6 right-6 bg-forest/10 hover:bg-red-500 text-forest hover:text-white p-2 rounded-full transition-all backdrop-blur-sm"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -360,23 +360,23 @@ export default function Calendar() {
   }
 
   return (
-    <div className="p-6 space-y-6 pb-24 bg-butter min-h-full">
+    <div className="p-6 space-y-6 pb-24 min-h-full">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-full bg-forest/5 border border-forest/10 flex items-center justify-center shadow-sm hover:bg-forest hover:text-butter transition-all group"
+            className="w-10 h-10 rounded-full bg-butter/10 border border-butter/20 flex items-center justify-center shadow-sm hover:bg-butter hover:text-forest text-butter transition-all group"
           >
             <ArrowLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
           </button>
 
-          <div className="flex gap-2 bg-forest/5 p-1 rounded-full shadow-sm border border-forest/10">
+          <div className="flex gap-2 bg-butter/10 p-1 rounded-full shadow-sm border border-butter/20">
             <button 
               onClick={() => setView('agenda')}
               className={cn(
                 "px-4 py-2 rounded-full text-xs font-bold transition-all",
-                view === 'agenda' ? "bg-forest text-butter" : "text-forest/40"
+                view === 'agenda' ? "bg-butter text-forest" : "text-butter/60 hover:text-butter"
               )}
             >
               Agenda
@@ -385,7 +385,7 @@ export default function Calendar() {
               onClick={() => setView('grid')}
               className={cn(
                 "px-4 py-2 rounded-full text-xs font-bold transition-all",
-                view === 'grid' ? "bg-forest text-butter" : "text-forest/40"
+                view === 'grid' ? "bg-butter text-forest" : "text-butter/60 hover:text-butter"
               )}
             >
               Grid
@@ -396,7 +396,7 @@ export default function Calendar() {
         {isAdmin && (
           <button 
             onClick={() => setShowAddModal(true)}
-            className="w-10 h-10 rounded-full bg-forest/5 border border-forest/10 flex items-center justify-center shadow-sm hover:bg-forest hover:text-butter transition-all"
+            className="w-10 h-10 rounded-full bg-butter/10 border border-butter/20 flex items-center justify-center shadow-sm hover:bg-butter hover:text-forest text-butter transition-all"
           >
             <Plus size={20} />
           </button>
@@ -406,15 +406,15 @@ export default function Calendar() {
       {/* Month Selector - Only in Agenda View */}
       {view === 'agenda' && (
         <div className="flex items-center justify-center gap-8 py-2">
-          <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="text-butter/20 hover:text-butter">
+          <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="text-butter/60 hover:text-butter">
             <ChevronLeft size={20} />
           </button>
           <div className="flex items-center gap-4">
-            <span className="text-xs font-bold uppercase tracking-widest text-butter/20">{format(subMonths(currentDate, 1), 'MMM')}</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-butter/60">{format(subMonths(currentDate, 1), 'MMM')}</span>
             <h2 className="text-xl font-black uppercase tracking-widest text-butter">{format(currentDate, 'MMM')}</h2>
-            <span className="text-xs font-bold uppercase tracking-widest text-butter/20">{format(addMonths(currentDate, 1), 'MMM')}</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-butter/60">{format(addMonths(currentDate, 1), 'MMM')}</span>
           </div>
-          <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="text-butter/20 hover:text-butter">
+          <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="text-butter/60 hover:text-butter">
             <ChevronRight size={20} />
           </button>
         </div>

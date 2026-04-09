@@ -205,7 +205,7 @@ export default function App() {
 
   if (isQuotaExceeded) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-forest p-6 text-white text-center">
+      <div className="flex items-center justify-center min-h-screen bg-forest p-6 text-butter text-center">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -227,7 +227,7 @@ export default function App() {
           </div>
           <button 
             onClick={() => window.location.reload()}
-            className="bg-white text-forest px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-butter transition-all shadow-xl"
+            className="bg-butter text-forest px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-butter/90 transition-all shadow-xl"
           >
             Try Refreshing
           </button>

@@ -304,8 +304,8 @@ export default function Login() {
   return (
     <div className="flex-1 p-8 flex flex-col justify-center">
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-black text-forest tracking-tighter mb-2">SchoolQuiz</h1>
-        <p className="text-forest/60 font-medium">Learn and compete with friends!</p>
+        <h1 className="text-4xl font-black text-butter tracking-tighter mb-2">SchoolQuiz</h1>
+        <p className="text-butter/60 font-medium">Learn and compete with friends!</p>
       </div>
 
       <motion.div
@@ -427,7 +427,7 @@ export default function Login() {
           )}
         </div>
 
-        <p className="text-center text-forest/40 text-xs px-8">
+        <p className="text-center text-butter/40 text-xs px-8">
           {loginMethod === 'id' 
             ? "Only authorized students can use ID login. Others must use Google."
             : "By signing in, you agree to our terms of service and privacy policy."}

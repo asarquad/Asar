@@ -70,10 +70,10 @@ export default function Home() {
     <div className="p-6 space-y-8 pb-24">
       {/* Welcome Header */}
       <div className="space-y-1">
-        <h2 className="text-3xl font-black text-forest tracking-tighter uppercase italic">
+        <h2 className="text-3xl font-black text-butter tracking-tighter uppercase italic">
           Welcome, {userData?.name?.split(' ')[0] || 'Scholar'}!
         </h2>
-        <p className="text-forest/60 font-medium text-sm">Ready to sharpen your mind today?</p>
+        <p className="text-butter/60 font-medium text-sm">Ready to sharpen your mind today?</p>
       </div>
 
       {/* Stats Overview Card */}
@@ -154,7 +154,7 @@ export default function Home() {
 
       {/* Activity Summary */}
       <div className="space-y-4">
-        <h3 className="text-xs font-black uppercase text-forest/40 tracking-[0.2em] px-2">Your Activity</h3>
+        <h3 className="text-xs font-black uppercase text-butter/40 tracking-[0.2em] px-2">Your Activity</h3>
         <div className="space-y-3">
           <div className="card p-5 flex items-center gap-4 bg-butter border-forest/10 shadow-sm">
             <div className="w-12 h-12 bg-forest/5 rounded-2xl flex items-center justify-center text-green-600">

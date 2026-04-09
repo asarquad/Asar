@@ -550,9 +550,9 @@ export default function AdminPanel() {
     return (
       <div className="p-8 flex flex-col items-center justify-center h-full text-center space-y-4">
         <Shield className="text-red-400" size={64} />
-        <h2 className="text-2xl font-bold text-gray-800">Access Denied</h2>
-        <p className="text-gray-500">You do not have administrative privileges.</p>
-        <button onClick={() => navigate('/')} className="btn-primary px-10">Back to Home</button>
+        <h2 className="text-2xl font-bold text-butter">Access Denied</h2>
+        <p className="text-butter/60">You do not have administrative privileges.</p>
+        <button onClick={() => navigate('/')} className="btn-primary px-10 bg-butter text-forest hover:bg-butter/90">Back to Home</button>
       </div>
     );
   }
@@ -707,19 +707,19 @@ export default function AdminPanel() {
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="bg-white rounded-3xl p-8 w-full max-w-sm space-y-6 text-center"
+              className="bg-butter rounded-3xl p-8 w-full max-w-sm space-y-6 text-center border border-forest/10"
             >
-              <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto">
                 <Trash2 size={32} />
               </div>
               <div>
-                <h4 className="text-xl font-bold text-gray-800">Are you sure?</h4>
-                <p className="text-gray-500 text-sm mt-2">This action cannot be undone. All associated data will be lost.</p>
+                <h4 className="text-xl font-bold text-forest">Are you sure?</h4>
+                <p className="text-forest/60 text-sm mt-2">This action cannot be undone. All associated data will be lost.</p>
               </div>
               <div className="flex gap-3">
                 <button
                   onClick={() => setConfirmDelete(null)}
-                  className="flex-1 py-3 rounded-xl font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all"
+                  className="flex-1 py-3 rounded-xl font-bold bg-forest/5 text-forest hover:bg-forest/10 transition-all"
                 >
                   Cancel
                 </button>
@@ -796,7 +796,7 @@ export default function AdminPanel() {
       <AnimatePresence mode="wait">
         {activeTab === 'users' && (
           <motion.div key="users" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-            <h3 className="text-xl font-bold text-forest">Manage Students</h3>
+            <h3 className="text-xl font-bold text-butter">Manage Students</h3>
             {loading ? <div className="text-center py-8">Loading...</div> : (
               users.map(user => (
                 <div key={user.id} className="card flex items-center justify-between p-4">
@@ -855,8 +855,8 @@ export default function AdminPanel() {
           <motion.div key="questions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-2xl font-black text-forest tracking-tight">Quiz Studio</h3>
-                <p className="text-xs text-gray-500 font-medium">Manage your question bank and categories</p>
+                <h3 className="text-2xl font-black text-butter tracking-tight">Quiz Studio</h3>
+                <p className="text-xs text-butter/60 font-medium">Manage your question bank and categories</p>
               </div>
               {questions.length > 0 && (
                 <button
@@ -1241,7 +1241,7 @@ export default function AdminPanel() {
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-bold text-forest">Authorized Students</h3>
+              <h3 className="font-bold text-butter">Authorized Students</h3>
               {adminStudents.map(student => (
                 <div key={student.id} className="card p-4 flex justify-between items-center">
                   <div>

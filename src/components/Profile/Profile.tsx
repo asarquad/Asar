@@ -295,8 +295,8 @@ export default function Profile() {
             )}
           </div>
           <div className="mb-2">
-            <h2 className="text-2xl font-black text-forest drop-shadow-md">{userData.name}</h2>
-            <p className="text-forest/80 font-bold text-sm drop-shadow-sm">@{userData.username}</p>
+            <h2 className="text-2xl font-black text-butter drop-shadow-md">{userData.name}</h2>
+            <p className="text-butter/80 font-bold text-sm drop-shadow-sm">@{userData.username}</p>
           </div>
         </div>
       </div>

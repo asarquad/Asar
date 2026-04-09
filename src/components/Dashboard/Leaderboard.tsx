@@ -70,11 +70,11 @@ export default function Leaderboard() {
       {/* Header */}
       <div className="flex justify-between items-start">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-forest">
+          <div className="flex items-center gap-2 text-butter">
             <Trophy size={28} className="fill-current" />
             <h2 className="text-3xl font-black tracking-tighter uppercase italic">Leaderboard</h2>
           </div>
-          <p className="text-forest/60 font-medium text-sm">Compete with students globally and rise to the top.</p>
+          <p className="text-butter/60 font-medium text-sm">Compete with students globally and rise to the top.</p>
         </div>
         <div className="flex gap-2">
           {isAdmin && (
