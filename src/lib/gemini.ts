@@ -7,7 +7,7 @@ if (!apiKey) {
 const ai = new GoogleGenAI({ apiKey });
 
 export async function generateQuizFromBook(bookTitle: string, content: string | { data: string, mimeType: string }) {
-  const model = "gemini-2.5-pro";
+  const model = "gemini-3.1-pro-preview";
   console.log("Gemini: Generating quiz for", bookTitle, "using model", model);
   
   const systemInstruction = `You are an elite curriculum developer. Your sole purpose is to generate high-volume, high-quality question banks. 
@@ -68,14 +68,17 @@ export async function generateQuizFromBook(bookTitle: string, content: string | 
     const parsed = JSON.parse(text || "[]");
     console.log(`Gemini: Parsed ${parsed.length} questions.`);
     return parsed;
-  } catch (e) {
+  } catch (e: any) {
     console.error("Gemini: generateQuizFromBook failed", e);
+    if (e.message?.includes("API key not valid") || e.status === 400) {
+      throw new Error("Invalid API Key. Please check your Gemini API Key in the settings.");
+    }
     throw e;
   }
 }
 
 export async function extractStudentsFromIDCards(content: { data: string, mimeType: string }) {
-  const model = "gemini-2.5-pro";
+  const model = "gemini-3.1-pro-preview";
   console.log("Gemini: Extracting students using model", model);
   
   const prompt = `You are a highly accurate data extraction specialist. 
@@ -122,14 +125,17 @@ export async function extractStudentsFromIDCards(content: { data: string, mimeTy
     const text = response.text;
     console.log("Gemini: Received students response length", text?.length);
     return JSON.parse(text || "[]");
-  } catch (e) {
+  } catch (e: any) {
     console.error("Gemini: extractStudentsFromIDCards failed", e);
+    if (e.message?.includes("API key not valid") || e.status === 400) {
+      throw new Error("Invalid API Key. Please check your Gemini API Key in the settings.");
+    }
     throw e;
   }
 }
 
 export async function extractEventsFromCalendar(content: { data: string, mimeType: string }) {
-  const model = "gemini-2.5-pro";
+  const model = "gemini-3.1-pro-preview";
   console.log("Gemini: Extracting events using model", model);
   
   const prompt = `You are an expert at extracting school calendar events from images. 
@@ -188,8 +194,11 @@ export async function extractEventsFromCalendar(content: { data: string, mimeTyp
     const text = response.text || "[]";
     console.log("Gemini: Received events response length", text.length);
     return JSON.parse(text);
-  } catch (e) {
+  } catch (e: any) {
     console.error("Gemini: extractEventsFromCalendar failed", e);
+    if (e.message?.includes("API key not valid") || e.status === 400) {
+      throw new Error("Invalid API Key. Please check your Gemini API Key in the settings.");
+    }
     throw e;
   }
 }

@@ -75,14 +75,14 @@ service cloud.firestore {
 
     function isValidUser(data) {
       return data.uid is string && data.uid.size() > 0 &&
-             data.username is string && data.username.size() >= 3 && data.username.size() <= 20 &&
+             data.username is string && data.username.size() >= 3 && data.username.size() <= 30 &&
              data.name is string && data.name.size() > 0 && data.name.size() <= 50 &&
              data.studentId is string &&
-             data.xp is number && data.xp >= 0 &&
+             data.xp is number &&
              (!('isBanned' in data) || data.isBanned is bool) &&
              (!('role' in data) || data.role in ['admin', 'student', 'user']) &&
-             (!('photoUrl' in data) || (data.photoUrl is string && data.photoUrl.size() < 1000)) &&
-             (!('bannerUrl' in data) || (data.bannerUrl is string && data.bannerUrl.size() < 1000));
+             (!('photoUrl' in data) || data.photoUrl == null || (data.photoUrl is string && data.photoUrl.size() < 1000)) &&
+             (!('bannerUrl' in data) || data.bannerUrl == null || (data.bannerUrl is string && data.bannerUrl.size() < 1000));
     }
 
     function isValidQuestion(data) {

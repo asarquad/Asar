@@ -126,12 +126,19 @@ export default function Login() {
 
         // Create new user profile
         try {
+          let baseUsername = user.email?.split('@')[0] || `user_${user.uid.slice(0, 5)}`;
+          if (baseUsername.length < 3) baseUsername = `${baseUsername}_user`;
+          if (baseUsername.length > 30) baseUsername = baseUsername.substring(0, 30);
+          
+          let displayName = user.displayName || 'Student';
+          if (displayName.length > 50) displayName = displayName.substring(0, 50);
+
           await setDoc(userDocRef, {
             uid: user.uid,
-            username: user.email?.split('@')[0] || `user_${user.uid.slice(0, 5)}`,
-            name: user.displayName || 'Student',
+            username: baseUsername,
+            name: displayName,
             email: user.email,
-            photoUrl: user.photoURL,
+            photoUrl: user.photoURL || null,
             xp: 0,
             achievements: [],
             lastUsernameChange: new Date().toISOString(),
@@ -257,10 +264,16 @@ export default function Login() {
 
       if (!userDoc?.exists()) {
         try {
+          let baseUsername = idInfo.studentId.length < 3 ? `${idInfo.studentId}_user` : idInfo.studentId;
+          if (baseUsername.length > 30) baseUsername = baseUsername.substring(0, 30);
+          
+          let displayName = authorizedData.name || 'Student';
+          if (displayName.length > 50) displayName = displayName.substring(0, 50);
+
           await setDoc(userDocRef, {
             uid: user.uid,
-            username: idInfo.studentId,
-            name: authorizedData.name,
+            username: baseUsername,
+            name: displayName,
             email: email,
             photoUrl: null,
             xp: 0,
@@ -304,7 +317,7 @@ export default function Login() {
   return (
     <div className="flex-1 p-8 flex flex-col justify-center">
       <div className="mb-12 text-center">
-        <img src="/logo.png" alt="Acadex Logo" className="h-24 mx-auto mb-4 object-contain" />
+        <h1 className="text-5xl md:text-6xl font-black tracking-widest text-forest uppercase mx-auto mb-4">ACADEX</h1>
         <p className="text-butter/60 font-medium">Learn and compete with friends!</p>
       </div>
 
