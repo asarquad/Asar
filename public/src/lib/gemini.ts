@@ -7,7 +7,7 @@ if (!apiKey) {
 const ai = new GoogleGenAI({ apiKey });
 
 export async function generateQuizFromBook(bookTitle: string, content: string | { data: string, mimeType: string }) {
-  const model = "gemini-2.5-pro";
+  const model = "gemini-3-flash-preview";
   console.log("Gemini: Generating quiz for", bookTitle, "using model", model);
   
   const systemInstruction = `You are an elite curriculum developer. Your sole purpose is to generate high-volume, high-quality question banks. 
@@ -75,7 +75,7 @@ export async function generateQuizFromBook(bookTitle: string, content: string | 
 }
 
 export async function extractStudentsFromIDCards(content: { data: string, mimeType: string }) {
-  const model = "gemini-2.5-pro";
+  const model = "gemini-3-flash-preview";
   console.log("Gemini: Extracting students using model", model);
   
   const prompt = `You are a highly accurate data extraction specialist. 
@@ -129,7 +129,7 @@ export async function extractStudentsFromIDCards(content: { data: string, mimeTy
 }
 
 export async function extractEventsFromCalendar(content: { data: string, mimeType: string }) {
-  const model = "gemini-2.5-pro";
+  const model = "gemini-3-flash-preview";
   console.log("Gemini: Extracting events using model", model);
   
   const prompt = `You are an expert at extracting school calendar events from images. 
