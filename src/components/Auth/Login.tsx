@@ -304,7 +304,7 @@ export default function Login() {
   return (
     <div className="flex-1 p-8 flex flex-col justify-center">
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-black text-butter tracking-tighter mb-2">Acadex</h1>
+        <img src="/logo.png" alt="Acadex Logo" className="h-16 mx-auto mb-4 object-contain" />
         <p className="text-butter/60 font-medium">Learn and compete with friends!</p>
       </div>
 
