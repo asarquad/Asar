@@ -317,7 +317,7 @@ export default function Login() {
   return (
     <div className="flex-1 p-8 flex flex-col justify-center">
       <div className="mb-12 text-center">
-        <h1 className="text-5xl md:text-6xl font-black tracking-widest text-forest uppercase mx-auto mb-4">ACADEX</h1>
+        <h1 className="text-5xl md:text-6xl font-black tracking-widest text-butter uppercase mx-auto mb-4">ACADEX</h1>
         <p className="text-butter/60 font-medium">Learn and compete with friends!</p>
       </div>
 
